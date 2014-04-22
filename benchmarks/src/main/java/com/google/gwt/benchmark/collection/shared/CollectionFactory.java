@@ -19,6 +19,7 @@ import com.google.gwt.benchmark.collection.client.JavaScriptArrayBooleanGwtImpl;
 import com.google.gwt.benchmark.collection.client.JavaScriptArrayGwtImpl;
 import com.google.gwt.benchmark.collection.client.JavaScriptArrayIntGwtImpl;
 import com.google.gwt.benchmark.collection.client.JavaScriptArrayNumberGwtImpl;
+import com.google.gwt.benchmark.collection.shared.impl.JavaScriptArrayBooleanJavaImpl;
 import com.google.gwt.benchmark.collection.shared.impl.JavaScriptArrayIntJavaImpl;
 import com.google.gwt.benchmark.collection.shared.impl.JavaScriptArrayJavaImpl;
 import com.google.gwt.benchmark.collection.shared.impl.JavaScriptArrayNumberJavaImpl;

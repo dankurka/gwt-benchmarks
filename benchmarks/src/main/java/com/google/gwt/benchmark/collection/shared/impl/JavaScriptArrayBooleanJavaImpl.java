@@ -13,7 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.google.gwt.benchmark.collection.shared;
+package com.google.gwt.benchmark.collection.shared.impl;
+
+import com.google.gwt.benchmark.collection.shared.JavaScriptArrayBoolean;
 
 /**
  * Java implementation of {@link JavaScriptArrayBoolean}.
@@ -48,5 +50,11 @@ public class JavaScriptArrayBooleanJavaImpl implements JavaScriptArrayBoolean {
 
     array[length] = t;
     length++;
+  }
+
+  public void set(int index, boolean value) {
+    // This does not handle out of bounds access currently.
+    // No benchmark has run into trouble so far.
+    array[index] = value;
   }
 }

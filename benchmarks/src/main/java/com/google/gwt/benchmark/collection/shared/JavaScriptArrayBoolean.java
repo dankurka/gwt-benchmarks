@@ -21,9 +21,11 @@ package com.google.gwt.benchmark.collection.shared;
  * Using these interfaces allows benchmarks to run on a JVM and be compiled to JavaScript.
  */
 public interface JavaScriptArrayBoolean {
-  boolean get(int i);
+  boolean get(int index);
 
   int length();
 
-  void push(boolean t);
+  void push(boolean value);
+
+  void set(int index, boolean value);
 }

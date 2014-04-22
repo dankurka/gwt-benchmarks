@@ -52,6 +52,10 @@ public final class JavaScriptArrayBooleanGwtImpl<T> extends JavaScriptObject imp
     return this.push(t);
   }-*/;
 
+  public native void set(int index, boolean value) /*-{
+    this[index] = value;
+  }-*/;
+
   protected JavaScriptArrayBooleanGwtImpl() {
   }
 }
