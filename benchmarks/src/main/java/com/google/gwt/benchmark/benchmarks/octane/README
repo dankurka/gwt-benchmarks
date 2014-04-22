@@ -1,0 +1,5 @@
+The benchmarks in this package are a java port of some of the v8 octane
+benchmarks [1]. They were ported to follow the original benchmarks as close as
+possible.
+
+[1] https://code.google.com/p/octane-benchmark/
