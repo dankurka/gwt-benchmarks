@@ -94,7 +94,7 @@ public class BenchmarkModule extends AbstractModule {
     private int poolSize;
 
     @Inject
-    public PoolProvider(@Named("poolsize") int poolSize) {
+    public PoolProvider(@Named("poolSize") int poolSize) {
       this.poolSize = poolSize;
     }
 

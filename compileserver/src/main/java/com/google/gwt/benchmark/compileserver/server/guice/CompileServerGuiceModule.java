@@ -13,6 +13,7 @@
  */
 package com.google.gwt.benchmark.compileserver.server.guice;
 
+import com.google.gwt.benchmark.compileserver.server.service.BenchmarkServiceImpl;
 import com.google.inject.Singleton;
 import com.google.inject.servlet.ServletModule;
 
@@ -46,5 +47,8 @@ public class CompileServerGuiceModule extends ServletModule {
     bind(DefaultServlet.class).in(Singleton.class);
     serve("/__bench/*").with(DefaultServlet.class,
         createServletParams(benchmarkOutputDir.getAbsolutePath()));
+
+    bind(BenchmarkServiceImpl.class).in(Singleton.class);
+    serve("/compileserver/data/service").with(BenchmarkServiceImpl.class);
   }
 }

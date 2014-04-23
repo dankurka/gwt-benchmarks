@@ -1,0 +1,19 @@
+.clickable {
+  cursor: pointer;
+}
+
+.statusFatalError {
+  background-color: red;
+}
+
+.statusOneFailed {
+  background-color: yellow;
+}
+
+.statusDone {
+  background-color: green;
+}
+
+.statusRunning {
+  background-color: yellow;
+}
