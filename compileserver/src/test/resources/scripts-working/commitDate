@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+
+if [[ -z "${1}" && -z "${2}" ]]; then
+  echo "usage: commitDate sourceLocation commitId" >&2
+  exit 1
+fi
+
+
+SOURCE_LOCATION=${1}
+COMMIT_ID=${2}
+echo "${SOURCE_LOCATION};${COMMIT_ID}"

@@ -1,0 +1,2 @@
+echo "buildSDK: This is my errormessage!" >&2
+exit 1;

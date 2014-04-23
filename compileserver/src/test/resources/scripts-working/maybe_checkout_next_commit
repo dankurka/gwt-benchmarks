@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+
+if [[ -z "${1}" && -z "${2}" ]]; then
+  echo "usage: maybe_checkout_next_commit parentCommitId sourceLocation" >&2
+  exit 1
+fi
+
+PARENT_COMMIT=${1}
+SOURCE_LOCATION=${2}
+
+echo "${PARENT_COMMIT};${SOURCE_LOCATION}" > target/test-out

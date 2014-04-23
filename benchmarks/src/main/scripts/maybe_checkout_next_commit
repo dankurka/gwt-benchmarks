@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+
+if [[ -z "${1}" || -z "${2}" ]]; then
+  echo "usage: maybe_checkout_next_commit parentCommitId sourceLocation" >&2
+  exit 1
+fi
+
+PARENT_COMMIT=${1}
+SOURCE_LOCATION=${2}
+
+cd ${SOURCE_LOCATION}
+git fetch origin master
+git checkout origin/master
+
+NEXT_COMMIT=$(git log --ancestry-path --format=%H ${PARENT_COMMIT}..origin/master | tail -1)
+
+if [[ -z "${NEXT_COMMIT}" ]]; then
+  exit 0
+fi
+
+git checkout ${NEXT_COMMIT}

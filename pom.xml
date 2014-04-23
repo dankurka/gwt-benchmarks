@@ -12,5 +12,7 @@
 
     <modules>
         <module>benchmarks</module>
+        <module>common</module>
+        <module>compileserver</module>
     </modules>
 </project>

@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+if [[ -z "${1}" || -z "${2}" ]]; then
+  echo "usage: checkout commitId sourceLocation" >&2
+  exit 1
+fi
+
+COMMIT_ID=${1}
+SOURCE_LOCATION=${2}
+
+cd ${SOURCE_LOCATION}
+git checkout ${COMMIT_ID}

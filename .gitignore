@@ -2,4 +2,12 @@ benchmarks/.classpath
 benchmarks/.project
 benchmarks/.settings/
 benchmarks/target/
+common/.classpath
+common/.project
+common/.settings/
+compileserver/.classpath
+compileserver/.project
+compileserver/.settings/
+common/target/
+compileserver/target/
 

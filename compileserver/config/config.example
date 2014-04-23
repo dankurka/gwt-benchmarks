@@ -1,0 +1,56 @@
+## The compile server uses a config file to read in all of its settings.
+## The file is passed to the container running the compile server using a
+## environment variable -DconfigFile=<absolute path>.
+##
+
+## Location settings
+
+# Location of the benchmarks (benchmarks/ in the checkout)
+benchmarksDirectory = /usr/local/temp/gwt-benchmarks/benchmarks/
+
+# The output folder for the GWT compiler, this folder is also served up by jetty
+compileOutputDir = /usr/local/temp/gwt-benchmarks/compileserver/target/benchmark-js/
+
+# The directory where the compile server can store information (last commit)
+persistenceDir = /usr/local/temp/persistenceDir/
+
+# The location of the GWT SDK source
+gwtSourceLocation = /usr/local/temp/gwt/
+
+## Runners
+# Url of the selenium hub
+seleniumHubUrl = http://myhost:4444/wd/hub
+
+# How many GWT compiles / benchmark execution should happen in parallel
+threadPoolSize = 5
+
+# Mode of the benchmarking system
+# Currently the system only supports server mode. In server mode the system will
+# track a repository and recompile and run the benchmarks for every change of 
+# the tracked repository.
+mode = server
+
+## Report settings
+# should we report results
+reportResuts = false
+
+# Url of the benchmark dashboard
+reporterUrl = https://gwt-bench.appspot.com/post_result
+
+# The secret that protects the dashboard
+reporterSecret = <mysecret>
+
+
+## Mail settings
+mail.to = peopletonotify@mydomain.com
+mail.from = mygmail@gmail.com
+mail.host = smtp.gmail.com
+mail.username = mygmail@gmail.com
+mail.password = my password
+
+## Misc
+# the html file used to serve up benchmarks
+moduleTemplate = runner_template.html
+
+# The port on which the benchmarking system is running
+servletContainerPort = 8888

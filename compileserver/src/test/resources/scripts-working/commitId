@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+if [[ -z "${1}" ]]; then
+  echo "usage: commitId sourceLocation" >&2
+  exit 1
+fi
+
+SOURCE_LOCATION=${1}
+echo "${SOURCE_LOCATION}"

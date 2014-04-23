@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e
+
+if [[ -z "${1}" || -z "${2}" || -z "${3}" || -z "${4}" || -z "${5}" ]]; then
+  # Not sending error to &2 since GWT compiler does not do that either
+  echo "usage: compileModule moduleName dev.jar user.jar benchmark_src output_dir"
+  exit 1
+fi
+
+
+MODULE_NAME=${1}
+GWT_DEV_JAR=${2}
+GWT_USER_JAR=${3}
+BENCHMARKS_SRC=${4}
+OUTPUT_DIR=${5}
+
+java -cp ${GWT_DEV_JAR}:${GWT_USER_JAR}:${BENCHMARKS_SRC} com.google.gwt.dev.Compiler -style PRETTY -war ${OUTPUT_DIR} "${MODULE_NAME}"

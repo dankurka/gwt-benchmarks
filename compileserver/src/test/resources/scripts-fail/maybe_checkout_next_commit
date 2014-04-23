@@ -1,0 +1,2 @@
+echo "maybe: This is my errormessage!" >&2
+exit 1;
