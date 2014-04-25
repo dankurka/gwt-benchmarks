@@ -18,4 +18,5 @@
   <replace-with class="com.google.gwt.benchmark.benchmarks.octane.client.deltablue.gwt.helper.OrderedCollectionJsImpl">
     <when-type-is class="com.google.gwt.benchmark.benchmarks.octane.client.deltablue.gwt.AbstractOrderedCollection"/>
   </replace-with>
+  <source path="client" includes="deltablue/gwt/*.java,deltablue/gwt/helper/*.java"/>
 </module>
