@@ -57,7 +57,7 @@ public class Injector {
     builder.append(js);
     for (int i = 0; i < mappings.length; i++) {
       builder.append(
-          "$wnd." + mappings[0].getGlobalName() + " = " + mappings[0].getLocalName() + ";\n");
+          "$wnd." + mappings[i].getGlobalName() + " = " + mappings[i].getLocalName() + ";\n");
     }
     builder.append("})();");
 

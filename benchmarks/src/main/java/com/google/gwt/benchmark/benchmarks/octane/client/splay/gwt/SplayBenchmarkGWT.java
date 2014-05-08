@@ -15,7 +15,6 @@
  */
 package com.google.gwt.benchmark.benchmarks.octane.client.splay.gwt;
 
-import com.google.gwt.benchmark.benchmarks.octane.client.splay.js.SplayJSBenchmark;
 import com.google.gwt.benchmark.framework.client.AbstractBenchmarkEntryPoint;
 import com.google.gwt.benchmark.framework.shared.AbstractBenchmark;
 
@@ -28,7 +27,7 @@ public class SplayBenchmarkGWT extends AbstractBenchmark {
 
     @Override
     protected AbstractBenchmark getBenchmark() {
-      return new SplayJSBenchmark();
+      return new SplayBenchmarkGWT();
     }
   }
 

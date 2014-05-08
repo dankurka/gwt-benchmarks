@@ -14,6 +14,7 @@
 
 <module>
   <inherits name="com.google.gwt.benchmark.benchmarks.octane.Octane"/>
+  <inherits name="com.google.gwt.resources.Resources"/>
   <entry-point class="com.google.gwt.benchmark.benchmarks.octane.client.deltablue.js.DeltaBlueJSBenchmark.EntryPoint"/>
   <source path="client" includes="deltablue/js/*.java,deltablue/js/*.js"/>
 </module>

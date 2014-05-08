@@ -14,6 +14,6 @@
 
 <module>
   <inherits name="com.google.gwt.benchmark.benchmarks.java.lang.Lang"/>
-  <entry-point class="com.google.gwt.benchmark.benchmarks.java.lang.shared.StringBuilderLongStringsBenchmark.EntryPoint"/>
+  <entry-point class="com.google.gwt.benchmark.benchmarks.java.lang.shared.StringBuilderShortStringsBenchmark.EntryPoint"/>
   <source path="shared" includes="StringBuilderShortStringsBenchmark.java" />
 </module>
