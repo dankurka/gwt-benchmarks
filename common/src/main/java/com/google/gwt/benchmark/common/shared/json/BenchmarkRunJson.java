@@ -39,8 +39,6 @@ public interface BenchmarkRunJson {
 
   void setCommitId(String commitId);
 
-  void setCommitTime(String commitTime);
-
   /**
    * Set the commit time of the patch in milliseconds since 1970.
    * <p>
