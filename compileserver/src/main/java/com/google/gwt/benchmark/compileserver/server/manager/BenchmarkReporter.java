@@ -120,7 +120,7 @@ public class BenchmarkReporter implements Runnable {
 
     BenchmarkRunJson runJSON = factory.run().as();
     runJSON.setCommitId(commitId);
-    runJSON.setCommitTimeMsEpoch((double)commitMsEpoch);
+    runJSON.setCommitTimeMsEpoch(commitMsEpoch);
     Map<String, List<BenchmarkResultJson>> results = new LinkedHashMap<>();
 
     for (Entry<String, BenchmarkRun> br : this.results.entrySet()) {
@@ -135,7 +135,7 @@ public class BenchmarkReporter implements Runnable {
         BenchmarkResultJson resultJSON = factory.result().as();
         resultJSON.setBenchmarkName(moduleName);
         resultJSON.setRunnerId(runnerConfig.toString());
-        resultJSON.setRunsPerMinute(result.getRunsPerSecond());
+        resultJSON.setRunsPerSecond(result.getRunsPerSecond());
         list.add(resultJSON);
       }
 

@@ -16,6 +16,8 @@ package com.google.gwt.benchmark.dashboard.server.domain;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 
 /**
  * A BenchmarkResult contains the runs per minute for one module on one runner.
@@ -31,6 +33,12 @@ public class BenchmarkResult {
     return benchmarkName + "&" + runnerId;
   }
 
+  public static Query createQueryLastest() {
+    Query query = new Query(BenchmarkRun.NAME);
+    query.addSort("commitTimeMsEpoch", SortDirection.DESCENDING);
+    return query;
+  }
+
   public static final String NAME = "BenchmarkResult";
 
   private Entity entity;
@@ -39,7 +47,7 @@ public class BenchmarkResult {
     entity = new Entity(createKey(run, benchmarkName, runnerId));
     entity.setProperty("runnerId", runnerId);
     entity.setProperty("benchmarkName", benchmarkName);
-    setRunsPerMinute(0);
+    setRunsPerSecond(0);
   }
 
   public BenchmarkResult(Entity entity) {
@@ -54,12 +62,12 @@ public class BenchmarkResult {
     return (String) entity.getProperty("runnerId");
   }
 
-  public void setRunsPerMinute(double runsPerMinute) {
-    entity.setProperty("runsPerMinute", runsPerMinute);
+  public void setRunsPerSecond(double runsPerMinute) {
+    entity.setProperty("runsPerSecond", runsPerMinute);
   }
 
   public double getRunsPerMinute() {
-    return (double) entity.getProperty("runsPerMinute");
+    return (double) entity.getProperty("runsPerSecond");
   }
 
   public Key getKey() {

@@ -70,13 +70,13 @@ public class AddBenchmarkResultServletTest {
     BenchmarkResultJson resultJSON = factory.result().as();
     resultJSON.setBenchmarkName(moduleName);
     resultJSON.setRunnerId("firefox_linux");
-    resultJSON.setRunsPerMinute(3);
+    resultJSON.setRunsPerSecond(3);
     list.add(resultJSON);
 
     BenchmarkResultJson resultJSON1 = factory.result().as();
     resultJSON1.setBenchmarkName(moduleName);
     resultJSON1.setRunnerId("chrome_linux");
-    resultJSON1.setRunsPerMinute(4);
+    resultJSON1.setRunsPerSecond(4);
     list.add(resultJSON1);
 
     String moduleName1 = "module2";
@@ -86,12 +86,12 @@ public class AddBenchmarkResultServletTest {
     BenchmarkResultJson resultJSON2 = factory.result().as();
     resultJSON2.setBenchmarkName(moduleName1);
     resultJSON2.setRunnerId("firefox_linux");
-    resultJSON2.setRunsPerMinute(3);
+    resultJSON2.setRunsPerSecond(3);
     list1.add(resultJSON2);
     BenchmarkResultJson resultJSON3 = factory.result().as();
     resultJSON3.setBenchmarkName(moduleName1);
     resultJSON3.setRunnerId("chrome_linux");
-    resultJSON3.setRunsPerMinute(4);
+    resultJSON3.setRunsPerSecond(4);
     list1.add(resultJSON3);
 
     runJSON.setResultByBenchmarkName(results);

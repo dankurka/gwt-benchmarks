@@ -16,13 +16,16 @@ package com.google.gwt.benchmark.dashboard.server.domain;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * A BencharmGraph contains all results for a certain module and runner for one week.
+ * A BenchmarkGraph contains all results for a certain module and runner for one week.
  */
 public class BenchmarkGraph {
 
@@ -35,6 +38,20 @@ public class BenchmarkGraph {
 
   private static String createName(String module, String runnerId, int week, int year) {
     return module + "_" + runnerId + "_" + week + "_" + year;
+  }
+
+
+  public  static Query createQuery(String benchmarkName, int week, int year) {
+    Query query = new Query(BenchmarkGraph.NAME);
+    Filter moduleFilter = new Query.FilterPredicate("module", FilterOperator.EQUAL, benchmarkName);
+    Filter weekFilter = new Query.FilterPredicate("week", FilterOperator.EQUAL, week);
+    Filter yearFilter = new Query.FilterPredicate("year", FilterOperator.EQUAL, year);
+
+    Filter compositeFilter =
+        Query.CompositeFilterOperator.and(moduleFilter, weekFilter, yearFilter);
+
+    query.setFilter(compositeFilter);
+    return query;
   }
 
   private Entity entity;

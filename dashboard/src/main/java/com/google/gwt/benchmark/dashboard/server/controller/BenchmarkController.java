@@ -35,16 +35,21 @@ import com.google.gwt.benchmark.dashboard.server.domain.BenchmarkGraph;
 import com.google.gwt.benchmark.dashboard.server.domain.BenchmarkResult;
 import com.google.gwt.benchmark.dashboard.server.domain.BenchmarkRun;
 import com.google.gwt.benchmark.dashboard.server.guice.DashboardServletGuiceModule;
+import com.google.gwt.benchmark.dashboard.shared.service.dto.BenchmarkResultsTable;
+
+import org.apache.commons.lang.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -93,6 +98,43 @@ public class BenchmarkController {
     }
   }
 
+  /**
+   * Returns the name of each benchmark included in the most
+   * recent benchmark run.
+   */
+  public List<String> getLatestBenchmarkNames() throws ControllerException {
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+
+    Query query = BenchmarkResult.createQueryLastest();
+
+    PreparedQuery prepare = ds.prepare(query);
+    List<Entity> list = prepare.asList(FetchOptions.Builder.withLimit(1));
+
+    if (list.size() == 0) {
+      throw new ControllerException("No entries in datastore");
+    }
+
+    BenchmarkRun run = new BenchmarkRun(list.get(0));
+    List<Key> results = run.getResults();
+    Map<Key, Entity> map = ds.get(results);
+    Set<String> modules = new HashSet<>();
+
+    for (Entry<Key, Entity> entry : map.entrySet()) {
+      BenchmarkResult result = new BenchmarkResult(entry.getValue());
+      modules.add(result.getBenchmarkName());
+    }
+
+    ArrayList<String> resultList = new ArrayList<>(modules);
+    Collections.sort(resultList);
+    return resultList;
+  }
+
+  public BenchmarkResultsTable getGraphs(String benchmarkName, int week, int year) {
+    Query query = BenchmarkGraph.createQuery(benchmarkName, week, year);
+    List<BenchmarkGraph> graphs = executeQuery(query);
+    return createResponse(benchmarkName, graphs, week, year);
+  }
+
   public void addBenchmarkResult(BenchmarkRunJson benchmarkRunJSON) throws ControllerException {
     ToPersist toPersist = createDomainObjects(benchmarkRunJSON);
     persistBenchmarkRun(toPersist, 3);
@@ -110,6 +152,62 @@ public class BenchmarkController {
     putBenchmarkGraph(benchmarkName, runnerId, weekSpan.commitWeek, weekSpan.commitYear,
         benchmarkGraphData.commitIds, benchmarkGraphData.runsPerSecond);
   }
+
+  private BenchmarkResultsTable createResponse(String benchmarkName,
+      List<BenchmarkGraph> graphs, int week, int year) {
+    Collections.sort(graphs, new Comparator<BenchmarkGraph>() {
+
+      @Override
+      public int compare(BenchmarkGraph o1, BenchmarkGraph o2) {
+        return o1.getRunnerId().compareTo(o2.getRunnerId());
+      }
+    });
+    String weekName = String.format("Week: %d Year: %d", week, year);
+    List<String> allRunnerIds = new ArrayList<String>();
+
+    List<String> commitIds = new ArrayList<String>();
+    List<double[]> runnerResultList = new ArrayList<>();
+
+    boolean first = true;
+
+    for (BenchmarkGraph benchmarkGraph : graphs) {
+      if (first) {
+        commitIds.addAll(benchmarkGraph.getCommitIds());
+        first = false;
+      } else {
+        // if an update is in progress some graph entities might have been updated
+        // and some not. In this case we are just going to return an empty response
+        if (commitIds.size() != benchmarkGraph.getCommitIds().size()) {
+          return BenchmarkResultsTable.create(benchmarkName, weekName, year, week,
+              Collections.<String>emptyList(),Collections.<String>emptyList(),
+              Collections.<double[]>emptyList());
+        }
+      }
+
+      allRunnerIds.add(benchmarkGraph.getRunnerId());
+      Double[] runsPerSecond = benchmarkGraph.getRunsPerSecond().toArray(new Double[] {});
+      double[] runs = ArrayUtils.toPrimitive(runsPerSecond);
+      runnerResultList.add(runs);
+    }
+
+    return BenchmarkResultsTable.create(benchmarkName, weekName, year, week, commitIds,
+        allRunnerIds, runnerResultList);
+  }
+
+  private List<BenchmarkGraph> executeQuery(Query query) {
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery prepare = ds.prepare(query);
+
+    List<Entity> entityList = prepare.asList(FetchOptions.Builder.withDefaults());
+
+    List<BenchmarkGraph> list = new ArrayList<>();
+    for (Entity entity : entityList) {
+      list.add(new BenchmarkGraph(entity));
+    }
+    return list;
+  }
+
+
 
   private BenchmarkGraphData calculateNewGraphData(String benchmarkName, String runnerId,
       long weekStartMsEpoch, long weekEndMsEpoch) {
@@ -209,7 +307,7 @@ public class BenchmarkController {
         runnerIds.add(benchmarkResultJSON.getRunnerId());
         BenchmarkResult benchmarkResult = new BenchmarkResult(benchmarkRun.getKey(), moduleName,
             benchmarkResultJSON.getRunnerId());
-        benchmarkResult.setRunsPerMinute(benchmarkResultJSON.getRunsPerMinute());
+        benchmarkResult.setRunsPerSecond(benchmarkResultJSON.getRunsPerSecond());
         brToPersist.add(benchmarkResult);
       }
     }

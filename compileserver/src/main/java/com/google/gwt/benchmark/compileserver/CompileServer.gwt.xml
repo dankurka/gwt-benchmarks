@@ -15,6 +15,7 @@
 <module rename-to="compileserver">
   <inherits name="com.google.gwt.user.User" />
   <inherits name="com.google.gwt.inject.Inject"/>
+  <inherits name="com.google.gwt.benchmark.common.Common" />
 
   <source path="client" />
   <source path="shared" />

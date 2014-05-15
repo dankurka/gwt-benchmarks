@@ -29,7 +29,7 @@ public interface BenchmarkResultJson {
 
   public String getRunnerId();
 
-  public double getRunsPerMinute();
+  public double getRunsPerSecond();
 
-  public void setRunsPerMinute(double runsPerMinute);
+  public void setRunsPerSecond(double runsPerSecond);
 }

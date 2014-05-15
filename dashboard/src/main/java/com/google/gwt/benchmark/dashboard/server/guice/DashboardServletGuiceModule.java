@@ -13,10 +13,10 @@
  */
 package com.google.gwt.benchmark.dashboard.server.guice;
 
+import com.google.gwt.benchmark.dashboard.server.service.DashBoardServiceImpl;
 import com.google.gwt.benchmark.dashboard.server.servlets.AddBenchmarkResultServlet;
 import com.google.gwt.benchmark.dashboard.server.servlets.AuthServlet;
 import com.google.gwt.benchmark.dashboard.server.servlets.GraphUpdateWorkerServlet;
-import com.google.inject.Singleton;
 import com.google.inject.servlet.ServletModule;
 
 /**
@@ -28,11 +28,9 @@ public class DashboardServletGuiceModule extends ServletModule {
 
   @Override
   protected void configureServlets() {
-    bind(AddBenchmarkResultServlet.class).in(Singleton.class);
     serve("/post_result").with(AddBenchmarkResultServlet.class);
-    bind(AuthServlet.class).in(Singleton.class);
     serve("/admin/").with(AuthServlet.class);
-    bind(GraphUpdateWorkerServlet.class).in(Singleton.class);
     serve(GRAPH_QUEUE_URL).with(GraphUpdateWorkerServlet.class);
+    serve("/dashboard/data/service").with(DashBoardServiceImpl.class);
   }
 }

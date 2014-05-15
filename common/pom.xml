@@ -16,8 +16,10 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <gwtversion>2.6.0</gwtversion>
+    <gwtversion>2.6.1</gwtversion>
   </properties>
+  
+  
 
   <dependencies>
     <dependency>
@@ -45,6 +47,18 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/client/**</include>
+          <include>**/shared/**</include>
+          <include>**/*.gwt.xml</include>
+          <include>**/public/**</include>
+        </includes>
+      </resource>
+    </resources>
+  
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

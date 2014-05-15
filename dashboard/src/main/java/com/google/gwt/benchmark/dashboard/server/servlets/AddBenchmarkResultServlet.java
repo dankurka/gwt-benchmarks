@@ -17,6 +17,7 @@ import com.google.gwt.benchmark.common.shared.json.BenchmarkRunJson;
 import com.google.gwt.benchmark.common.shared.json.JsonFactory;
 import com.google.gwt.benchmark.dashboard.server.controller.AuthController;
 import com.google.gwt.benchmark.dashboard.server.controller.BenchmarkController;
+import com.google.inject.Singleton;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 
@@ -35,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * A put request on this servlet will add a new benchmark to the dashboard.
  */
+@Singleton
 public class AddBenchmarkResultServlet extends HttpServlet {
 
   private static final Logger logger = Logger.getLogger(AddBenchmarkResultServlet.class.getName());

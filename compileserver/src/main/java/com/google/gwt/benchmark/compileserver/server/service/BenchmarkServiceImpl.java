@@ -13,12 +13,12 @@
  */
 package com.google.gwt.benchmark.compileserver.server.service;
 
+import com.google.gwt.benchmark.common.shared.service.ServiceException;
 import com.google.gwt.benchmark.compileserver.server.manager.BenchmarkManager;
 import com.google.gwt.benchmark.compileserver.server.manager.BenchmarkRun;
 import com.google.gwt.benchmark.compileserver.server.manager.BenchmarkRun.Result;
 import com.google.gwt.benchmark.compileserver.server.manager.RunnerConfig;
 import com.google.gwt.benchmark.compileserver.shared.Service;
-import com.google.gwt.benchmark.compileserver.shared.ServiceException;
 import com.google.gwt.benchmark.compileserver.shared.dto.BenchmarkOverviewEntryDTO;
 import com.google.gwt.benchmark.compileserver.shared.dto.BenchmarkOverviewEntryDTO.BenchmarState;
 import com.google.gwt.benchmark.compileserver.shared.dto.BenchmarkOverviewResponseDTO;

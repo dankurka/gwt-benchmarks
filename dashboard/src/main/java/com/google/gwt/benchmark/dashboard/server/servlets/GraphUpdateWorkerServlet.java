@@ -16,6 +16,7 @@ package com.google.gwt.benchmark.dashboard.server.servlets;
 import com.google.gwt.benchmark.dashboard.server.controller.BenchmarkController;
 import com.google.gwt.benchmark.dashboard.server.controller.ControllerException;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -29,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * This servlet handles request for the graph update queue.
  */
+@Singleton
 public class GraphUpdateWorkerServlet extends HttpServlet {
 
   private static final Logger logger = Logger.getLogger(GraphUpdateWorkerServlet.class.getName());

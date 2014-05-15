@@ -113,21 +113,21 @@ public class BenchmarkReporterTest {
     List<BenchmarkResultJson> module1List = resultsJSON.get("module1");
     Assert.assertEquals(2, module1List.size());
     Assert.assertEquals("module1", module1List.get(0).getBenchmarkName());
-    Assert.assertEquals(2, module1List.get(0).getRunsPerMinute(), 0.0001);
+    Assert.assertEquals(2, module1List.get(0).getRunsPerSecond(), 0.0001);
     Assert.assertEquals(RunnerConfigs.CHROME_LINUX.toString(),
         module1List.get(0).getRunnerId().toString());
     Assert.assertEquals("module1", module1List.get(1).getBenchmarkName());
-    Assert.assertEquals(3, module1List.get(1).getRunsPerMinute(), 0.0001);
+    Assert.assertEquals(3, module1List.get(1).getRunsPerSecond(), 0.0001);
     Assert.assertEquals(RunnerConfigs.FIREFOX_LINUX.toString(),
         module1List.get(1).getRunnerId().toString());
 
     List<BenchmarkResultJson> module1List2 = resultsJSON.get("module2");
     Assert.assertEquals("module2", module1List2.get(0).getBenchmarkName());
-    Assert.assertEquals(4, module1List2.get(0).getRunsPerMinute(), 0.0001);
+    Assert.assertEquals(4, module1List2.get(0).getRunsPerSecond(), 0.0001);
     Assert.assertEquals(RunnerConfigs.CHROME_LINUX.toString(),
         module1List2.get(0).getRunnerId().toString());
     Assert.assertEquals("module2", module1List2.get(1).getBenchmarkName());
-    Assert.assertEquals(5, module1List2.get(1).getRunsPerMinute(), 0.0001);
+    Assert.assertEquals(5, module1List2.get(1).getRunsPerSecond(), 0.0001);
     Assert.assertEquals(RunnerConfigs.FIREFOX_LINUX.toString(),
         module1List2.get(1).getRunnerId().toString());
 

@@ -32,6 +32,7 @@ import com.google.gwt.benchmark.dashboard.server.domain.BenchmarkGraph;
 import com.google.gwt.benchmark.dashboard.server.domain.BenchmarkResult;
 import com.google.gwt.benchmark.dashboard.server.domain.BenchmarkRun;
 import com.google.gwt.benchmark.dashboard.server.servlets.AddBenchmarkResultServletTest;
+import com.google.gwt.benchmark.dashboard.shared.service.dto.BenchmarkResultsTable;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -149,19 +150,19 @@ public class BenchmarkControllerTest {
     benchmarkRun.setRunnerIds(runnerIds);
     BenchmarkResult benchmarkResult1 =
         new BenchmarkResult(benchmarkRun.getKey(), "module1", "linux_ff");
-    benchmarkResult1.setRunsPerMinute(100);
+    benchmarkResult1.setRunsPerSecond(100);
     ds.put(benchmarkResult1.getEntity());
     BenchmarkResult benchmarkResult2 =
         new BenchmarkResult(benchmarkRun.getKey(), "module1", "linux_chrome");
-    benchmarkResult2.setRunsPerMinute(200);
+    benchmarkResult2.setRunsPerSecond(200);
     ds.put(benchmarkResult2.getEntity());
     BenchmarkResult benchmarkResult3 =
         new BenchmarkResult(benchmarkRun.getKey(), "module2", "linux_ff");
-    benchmarkResult3.setRunsPerMinute(300);
+    benchmarkResult3.setRunsPerSecond(300);
     ds.put(benchmarkResult3.getEntity());
     BenchmarkResult benchmarkResult4 =
         new BenchmarkResult(benchmarkRun.getKey(), "module2", "linux_chrome");
-    benchmarkResult4.setRunsPerMinute(400);
+    benchmarkResult4.setRunsPerSecond(400);
     ds.put(benchmarkResult4.getEntity());
 
     benchmarkRun.setResults(Arrays.asList(benchmarkResult1.getKey(), benchmarkResult2.getKey(),
@@ -173,16 +174,16 @@ public class BenchmarkControllerTest {
     benchmarkRun = new BenchmarkRun("commitId1", commitTime_20th_march_2014 + 5000L);
     benchmarkRun.setRunnerIds(runnerIds);
     benchmarkResult1 = new BenchmarkResult(benchmarkRun.getKey(), "module1", "linux_ff");
-    benchmarkResult1.setRunsPerMinute(101);
+    benchmarkResult1.setRunsPerSecond(101);
     ds.put(benchmarkResult1.getEntity());
     benchmarkResult2 = new BenchmarkResult(benchmarkRun.getKey(), "module1", "linux_chrome");
-    benchmarkResult2.setRunsPerMinute(201);
+    benchmarkResult2.setRunsPerSecond(201);
     ds.put(benchmarkResult2.getEntity());
     benchmarkResult3 = new BenchmarkResult(benchmarkRun.getKey(), "module2", "linux_ff");
-    benchmarkResult3.setRunsPerMinute(301);
+    benchmarkResult3.setRunsPerSecond(301);
     ds.put(benchmarkResult3.getEntity());
     benchmarkResult4 = new BenchmarkResult(benchmarkRun.getKey(), "module2", "linux_chrome");
-    benchmarkResult4.setRunsPerMinute(401);
+    benchmarkResult4.setRunsPerSecond(401);
     ds.put(benchmarkResult4.getEntity());
 
     benchmarkRun.setResults(Arrays.asList(benchmarkResult1.getKey(), benchmarkResult2.getKey(),
@@ -194,16 +195,16 @@ public class BenchmarkControllerTest {
     benchmarkRun = new BenchmarkRun("commitId2", commitTime_20th_march_2014 - oneWeekInMs);
     benchmarkRun.setRunnerIds(runnerIds);
     benchmarkResult1 = new BenchmarkResult(benchmarkRun.getKey(), "module1", "linux_ff");
-    benchmarkResult1.setRunsPerMinute(102);
+    benchmarkResult1.setRunsPerSecond(102);
     ds.put(benchmarkResult1.getEntity());
     benchmarkResult2 = new BenchmarkResult(benchmarkRun.getKey(), "module1", "linux_chrome");
-    benchmarkResult2.setRunsPerMinute(202);
+    benchmarkResult2.setRunsPerSecond(202);
     ds.put(benchmarkResult2.getEntity());
     benchmarkResult3 = new BenchmarkResult(benchmarkRun.getKey(), "module2", "linux_ff");
-    benchmarkResult3.setRunsPerMinute(302);
+    benchmarkResult3.setRunsPerSecond(302);
     ds.put(benchmarkResult3.getEntity());
     benchmarkResult4 = new BenchmarkResult(benchmarkRun.getKey(), "module2", "linux_chrome");
-    benchmarkResult4.setRunsPerMinute(402);
+    benchmarkResult4.setRunsPerSecond(402);
     ds.put(benchmarkResult4.getEntity());
 
     benchmarkRun.setResults(Arrays.asList(benchmarkResult1.getKey(), benchmarkResult2.getKey(),
@@ -215,16 +216,16 @@ public class BenchmarkControllerTest {
     benchmarkRun = new BenchmarkRun("commitId3", commitTime_20th_march_2014 + oneWeekInMs);
     benchmarkRun.setRunnerIds(runnerIds);
     benchmarkResult1 = new BenchmarkResult(benchmarkRun.getKey(), "module1", "linux_ff");
-    benchmarkResult1.setRunsPerMinute(103);
+    benchmarkResult1.setRunsPerSecond(103);
     ds.put(benchmarkResult1.getEntity());
     benchmarkResult2 = new BenchmarkResult(benchmarkRun.getKey(), "module1", "linux_chrome");
-    benchmarkResult2.setRunsPerMinute(203);
+    benchmarkResult2.setRunsPerSecond(203);
     ds.put(benchmarkResult2.getEntity());
     benchmarkResult3 = new BenchmarkResult(benchmarkRun.getKey(), "module2", "linux_ff");
-    benchmarkResult3.setRunsPerMinute(303);
+    benchmarkResult3.setRunsPerSecond(303);
     ds.put(benchmarkResult3.getEntity());
     benchmarkResult4 = new BenchmarkResult(benchmarkRun.getKey(), "module2", "linux_chrome");
-    benchmarkResult4.setRunsPerMinute(403);
+    benchmarkResult4.setRunsPerSecond(403);
     ds.put(benchmarkResult4.getEntity());
 
     benchmarkRun.setResults(Arrays.asList(benchmarkResult1.getKey(), benchmarkResult2.getKey(),
@@ -317,5 +318,48 @@ public class BenchmarkControllerTest {
     Assert.assertEquals(401, benchmarkGraph.getRunsPerSecond().get(1), 0.0001);
     // delete the entity
     ds.delete(benchmarkGraph.getEntity().getKey());
+  }
+
+  @Test
+  public void testGetGraph() {
+
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+
+    // put some graphs in the store
+    BenchmarkGraph benchmarkGraph1 = new BenchmarkGraph("module1", "linux_ff", 4, 2014);
+    benchmarkGraph1.setCommitIds(Arrays.asList("commit1", "commit2", "commit3"));
+    benchmarkGraph1.setRunsPerSecond(Arrays.asList(1.0, 2.0, 3.0));
+    ds.put(benchmarkGraph1.getEntity());
+
+    BenchmarkGraph benchmarkGraph2 = new BenchmarkGraph("module1", "linux_chrome", 4, 2014);
+    benchmarkGraph2.setCommitIds(Arrays.asList("commit1", "commit2", "commit3"));
+    benchmarkGraph2.setRunsPerSecond(Arrays.asList(4.0, 5.0, 6.0));
+    ds.put(benchmarkGraph2.getEntity());
+
+    // another week
+    BenchmarkGraph benchmarkGraph3 = new BenchmarkGraph("module1", "linux_chrome", 5, 2014);
+    benchmarkGraph3.setCommitIds(Arrays.asList("commit4", "commit5", "commit6"));
+    benchmarkGraph3.setRunsPerSecond(Arrays.asList(4.1, 5.1, 6.1));
+    ds.put(benchmarkGraph3.getEntity());
+
+    BenchmarkController controller = new BenchmarkController();
+    BenchmarkResultsTable dto =
+        controller.getGraphs("module1", 4, 2014);
+
+    Assert.assertEquals(2, dto.getColumnCount());
+    Assert.assertEquals(2, dto.getAllRunnerIds().size());
+    Assert.assertTrue(dto.getAllRunnerIds().contains("linux_chrome"));
+    Assert.assertTrue(dto.getAllRunnerIds().contains("linux_ff"));
+
+    Assert.assertEquals(3, dto.getRowCount());
+    Assert.assertEquals(Arrays.asList("commit1", "commit2", "commit3"), dto.getCommitIds());
+    Assert.assertEquals("module1", dto.getBenchmarkName());
+
+    Assert.assertEquals(4.0, dto.getRunsPerSecond(0, 0), 0.0001);
+    Assert.assertEquals(5.0, dto.getRunsPerSecond(0, 1), 0.0001);
+    Assert.assertEquals(6.0, dto.getRunsPerSecond(0, 2), 0.0001);
+    Assert.assertEquals(1.0, dto.getRunsPerSecond(1, 0), 0.0001);
+    Assert.assertEquals(2.0, dto.getRunsPerSecond(1, 1), 0.0001);
+    Assert.assertEquals(3.0, dto.getRunsPerSecond(1, 2), 0.0001);
   }
 }

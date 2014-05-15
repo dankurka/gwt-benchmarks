@@ -16,6 +16,7 @@ package com.google.gwt.benchmark.dashboard.server.servlets;
 import com.google.gwt.benchmark.dashboard.server.controller.AuthController;
 import com.google.gwt.benchmark.dashboard.server.controller.ControllerException;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.io.IOException;
 
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * This servlet can update the auth phrase required to post benchmarks.
  */
+@Singleton
 public class AuthServlet extends HttpServlet {
 
   private final AuthController authController;

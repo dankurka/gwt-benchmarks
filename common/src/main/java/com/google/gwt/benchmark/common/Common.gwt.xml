@@ -14,7 +14,7 @@
 
 <module>
   <inherits name="com.google.gwt.core.Core" />
-  <inherits name="com.google.gwt.autobeans.AutoBeans"/>
+  <inherits name="com.google.web.bindery.autobean.AutoBean"/>
   <source path="client" />
   <source path="shared" />
 </module>

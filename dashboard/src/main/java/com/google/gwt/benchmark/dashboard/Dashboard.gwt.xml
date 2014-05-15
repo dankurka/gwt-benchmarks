@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.6.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.6.0/distro-source/core/src/gwt-module.dtd">
+<module rename-to="dashboard">
+  <inherits name="com.google.gwt.user.User" />
+  <inherits name="com.google.gwt.activity.Activity"/>
+  <inherits name="com.google.gwt.inject.Inject"/>
+  <inherits name='com.google.gwt.visualization.Visualization'/>
+  <inherits name="com.google.common.collect.Collect"/>
+  <inherits name="com.google.gwt.benchmark.common.Common" />
+  <source path="client" excludes='**/*Test.java'/>
+  <source path="shared" />
+  <entry-point class="com.google.gwt.benchmark.dashboard.client.DashBoardEntryPoint"/>
+
+  <!-- This can be removed for GWT 2.7 -->
+  <add-linker name="xsiframe" />
+  <set-configuration-property name="devModeRedirectEnabled"
+    value="true" />
+</module>

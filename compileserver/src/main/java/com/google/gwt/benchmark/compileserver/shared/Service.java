@@ -13,6 +13,7 @@
  */
 package com.google.gwt.benchmark.compileserver.shared;
 
+import com.google.gwt.benchmark.common.shared.service.ServiceException;
 import com.google.gwt.benchmark.compileserver.shared.dto.BenchmarkOverviewResponseDTO;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
