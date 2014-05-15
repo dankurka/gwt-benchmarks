@@ -136,7 +136,7 @@ public class BenchmarkManagerTest {
         ArgumentCaptor.forClass(ReportProgressHandler.class);
 
     Mockito.when(reporterFactory.create(resultCaptor.capture(), Mockito.anyString(),
-        Mockito.anyString(), reportProgressHandlerCaptor.capture())).thenReturn(benchmarkReporter);
+        Mockito.anyLong(), reportProgressHandlerCaptor.capture())).thenReturn(benchmarkReporter);
 
     Assert.assertFalse(manager.isRunning());
 
@@ -267,7 +267,7 @@ public class BenchmarkManagerTest {
         timerProvider,
         errorReporter);
 
-    Mockito.when(commitReader.getDateForCommit(Mockito.anyString())).thenThrow(
+    Mockito.when(commitReader.getDateForCommitInMsEpoch(Mockito.anyString())).thenThrow(
         new BenchmarkManagerException(""));
 
     Assert.assertFalse(manager.isRunning());
@@ -352,7 +352,7 @@ public class BenchmarkManagerTest {
         ArgumentCaptor.forClass(ReportProgressHandler.class);
 
     Mockito.when(reporterFactory.create(resultCaptor.capture(), Mockito.anyString(),
-        Mockito.anyString(), reportProgressHandlerCaptor.capture())).thenReturn(benchmarkReporter);
+        Mockito.anyLong(), reportProgressHandlerCaptor.capture())).thenReturn(benchmarkReporter);
 
     Assert.assertFalse(manager.isRunning());
 
@@ -451,7 +451,7 @@ public class BenchmarkManagerTest {
         ArgumentCaptor.forClass(ReportProgressHandler.class);
 
     Mockito.when(reporterFactory.create(resultCaptor.capture(), Mockito.anyString(),
-        Mockito.anyString(), reportProgressHandlerCaptor.capture())).thenReturn(benchmarkReporter);
+        Mockito.anyLong(), reportProgressHandlerCaptor.capture())).thenReturn(benchmarkReporter);
 
     Assert.assertFalse(manager.isRunning());
 

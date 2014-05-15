@@ -56,7 +56,7 @@ public class BenchmarkReporter implements Runnable {
 
   public interface Factory {
     BenchmarkReporter create(Map<String, BenchmarkRun> results,
-        @Assisted("commitId") String commitId, @Assisted("commitDate") String commitDate,
+        @Assisted("commitId") String commitId, @Assisted("commitDate") long commitMsEpoch,
         ReportProgressHandler reportProgressHandler);
   }
 
@@ -71,17 +71,17 @@ public class BenchmarkReporter implements Runnable {
 
   private final ReportProgressHandler reportProgressHandler;
 
-  private final String commitDate;
+  private final long commitMsEpoch;
 
   @Inject
   public BenchmarkReporter(HttpURLConnectionFactory httpURLConnectionFactory,
       @Assisted Map<String, BenchmarkRun> results, @Assisted("commitId") String commitId,
-      @Assisted("commitDate") String commitDate,
+      @Assisted("commitDate") long commitMsEpoch,
       @Assisted ReportProgressHandler reportProgressHandler) {
     this.httpURLConnectionFactory = httpURLConnectionFactory;
     this.results = results;
     this.commitId = commitId;
-    this.commitDate = commitDate;
+    this.commitMsEpoch = commitMsEpoch;
     this.reportProgressHandler = reportProgressHandler;
   }
 
@@ -116,7 +116,7 @@ public class BenchmarkReporter implements Runnable {
 
     BenchmarkRunJson runJSON = factory.run().as();
     runJSON.setCommitId(commitId);
-    runJSON.setCommitTime(commitDate);
+    runJSON.setCommitTimeMsEpoch((double)commitMsEpoch);
     Map<String, List<BenchmarkResultJson>> results = new LinkedHashMap<>();
 
     for (Entry<String, BenchmarkRun> br : this.results.entrySet()) {

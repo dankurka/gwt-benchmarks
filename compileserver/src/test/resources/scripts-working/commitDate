@@ -6,7 +6,4 @@ if [[ -z "${1}" && -z "${2}" ]]; then
   exit 1
 fi
 
-
-SOURCE_LOCATION=${1}
-COMMIT_ID=${2}
-echo "${SOURCE_LOCATION};${COMMIT_ID}"
+echo "1234987"

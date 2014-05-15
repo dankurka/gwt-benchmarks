@@ -95,10 +95,13 @@ public class CliInteractor implements BenchmarkCompiler {
         gitCommitScript.getAbsolutePath() + " " + gwtSourceLocation.getAbsolutePath());
   }
 
-  public String getDateForCommit(String currentCommitId) throws BenchmarkManagerException {
+  public long getDateForCommitInMsEpoch(String currentCommitId) throws BenchmarkManagerException {
     File commitDateScript = new File(scriptDirectory, "commitDate");
-    return runCommand(commitDateScript.getAbsolutePath() + " " + gwtSourceLocation.getAbsolutePath()
-        + " " + currentCommitId);
+    String dateForCommitString = runCommand(commitDateScript.getAbsolutePath() + " "
+        + gwtSourceLocation.getAbsolutePath() + " " + currentCommitId);
+    // cut off new line
+    dateForCommitString = dateForCommitString.substring(0, dateForCommitString.length() - 1);
+    return Long.valueOf(dateForCommitString) * 1000;
   }
 
   public String getLastCommitId() throws BenchmarkManagerException {

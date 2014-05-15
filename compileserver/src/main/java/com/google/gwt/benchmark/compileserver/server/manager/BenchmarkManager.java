@@ -102,7 +102,7 @@ public class BenchmarkManager {
         }
       }
       if (workCount.decrementAndGet() == 0) {
-        maybeReportResults(benchmarkRun.getCommitId(), benchmarkRun.getCommitDate());
+        maybeReportResults(benchmarkRun.getCommitId(), benchmarkRun.getCommitMsEpoch());
       }
     }
 
@@ -162,7 +162,7 @@ public class BenchmarkManager {
 
   private BenchmarkWorker.Factory benchmarkWorkerFactory;
 
-  private String currentCommitDate;
+  private long currentCommitDateMsEpoch;
 
   private boolean currentlyRunning = false;
 
@@ -280,13 +280,13 @@ public class BenchmarkManager {
   }
 
   private BenchmarkRun createBenchmarkRunForModule(String moduleName, String commitId,
-      String commitDate) {
-    BenchmarkRun br = new BenchmarkRun(moduleName, commitId, commitDate);
+      long currentCommitDateMsEpoch) {
+    BenchmarkRun br = new BenchmarkRun(moduleName, commitId, currentCommitDateMsEpoch);
     br.addRunner(RunnerConfigs.FIREFOX_LINUX);
     return br;
   }
 
-  private void maybeReportResults(String commitId, String commitDate) {
+  private void maybeReportResults(String commitId, long commitMsEpoch) {
     Map<String, BenchmarkRun> results;
     synchronized (benchmarkRunsByNameLock) {
       results = deepClone(benchmarkRunsByName);
@@ -324,7 +324,7 @@ public class BenchmarkManager {
         commands.add(Command.SUCCESSFUL_RUN);
       }
     };
-    new Thread(reporterFactory.create(results, commitId, commitDate, p)).start();
+    new Thread(reporterFactory.create(results, commitId, commitMsEpoch, p)).start();
   }
 
   private Command getNextCommand() {
@@ -345,7 +345,7 @@ public class BenchmarkManager {
       setLastCommit(cliInteractor.getLastCommitId());
       currentCommitId = getLastCommitId();
       logger.info(String.format("Last commit was %s", currentCommitId));
-      currentCommitDate = cliInteractor.getDateForCommit(currentCommitId);
+      currentCommitDateMsEpoch = cliInteractor.getDateForCommitInMsEpoch(currentCommitId);
       logger.info("Checking out last commit");
       cliInteractor.checkout(getLastCommitId());
 
@@ -390,12 +390,12 @@ public class BenchmarkManager {
               logger.info(String.format("found a new commit %s", currentCommitId));
 
               logger.info("Getting its commit date");
-              currentCommitDate = cliInteractor.getDateForCommit(currentCommitId);
+              currentCommitDateMsEpoch = cliInteractor.getDateForCommitInMsEpoch(currentCommitId);
 
               logger.info("Building SDK");
               cliInteractor.buildSDK();
               logger.info("Starting benchmark runners");
-              startBenchmarkingAllForCommit(currentCommitId, currentCommitDate);
+              startBenchmarkingAllForCommit(currentCommitId, currentCommitDateMsEpoch);
               state = State.RUNNING_BENCHMARKS;
             }
 
@@ -424,7 +424,7 @@ public class BenchmarkManager {
             continue;
           }
           state = State.RUNNING_BENCHMARKS;
-          startBenchmarkingAllForCommit(currentCommitId, currentCommitDate);
+          startBenchmarkingAllForCommit(currentCommitId, currentCommitDateMsEpoch);
           break;
 
         case SUCCESSFUL_RUN:
@@ -448,7 +448,7 @@ public class BenchmarkManager {
     }
   }
 
-  private void startBenchmarkingAllForCommit(String commitId, String commitDate) {
+  private void startBenchmarkingAllForCommit(String commitId, long currentCommitDateMsEpoch) {
 
     pool = poolProvider.get();
 
@@ -461,7 +461,8 @@ public class BenchmarkManager {
         continue;
       }
 
-      BenchmarkRun br = createBenchmarkRunForModule(benchmarkModuleName, commitId, commitDate);
+      BenchmarkRun br = createBenchmarkRunForModule(benchmarkModuleName, commitId,
+          currentCommitDateMsEpoch);
       addBenchmarkRun(br);
 
       ProgressHandler progressHandler = new ThreadSafeProgressHandler(br);

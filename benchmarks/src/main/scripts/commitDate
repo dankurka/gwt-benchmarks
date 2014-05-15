@@ -11,4 +11,4 @@ SOURCE_LOCATION=${1}
 COMMIT_ID=${2}
 
 cd ${SOURCE_LOCATION}
-git show -s --format=%ci ${COMMIT_ID}
+git show -s --format=%ct ${COMMIT_ID}

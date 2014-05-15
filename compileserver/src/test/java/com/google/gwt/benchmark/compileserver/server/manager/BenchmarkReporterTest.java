@@ -46,13 +46,13 @@ public class BenchmarkReporterTest {
   private HttpURLConnection urlConnection;
   private OutputStream outputStream;
   private String commitId;
-  private String commitDate;
+  private long commitDate;
   private ReportProgressHandler reportProgressHandler;
 
   @Before
   public void setup() {
     commitId = "commitId1";
-    commitDate = "my commit date";
+    commitDate = 77;
 
     results = new HashMap<>();
     BenchmarkRun benchmarkRun = new BenchmarkRun("module1", commitId, commitDate);
@@ -103,7 +103,7 @@ public class BenchmarkReporterTest {
     BenchmarkRunJson benchmarkRunJSON = bean.as();
 
     Assert.assertEquals(commitId, benchmarkRunJSON.getCommitId());
-    Assert.assertEquals(commitDate, benchmarkRunJSON.getCommitTime());
+    Assert.assertEquals(commitDate, benchmarkRunJSON.getCommitTimeMsEpoch(), 0.0001);
 
     Map<String, List<BenchmarkResultJson>> resultsJSON =
         benchmarkRunJSON.getResultByBenchmarkName();

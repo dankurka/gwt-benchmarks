@@ -69,7 +69,7 @@ public class BenchmarkRun {
   }
 
   public static BenchmarkRun from(BenchmarkRun other) {
-    BenchmarkRun clone = new BenchmarkRun(other.moduleName, other.commitId, other.commitDate);
+    BenchmarkRun clone = new BenchmarkRun(other.moduleName, other.commitId, other.commitMsEpoch);
     clone.runners = other.getRunConfigs();
     clone.results = deepClone(other.results);
     clone.state = other.state;
@@ -97,12 +97,12 @@ public class BenchmarkRun {
 
   private String errorMessage;
 
-  private final String commitDate;
+  private final long commitMsEpoch;
 
-  public BenchmarkRun(String moduleName, String commitId, String commitDate) {
+  public BenchmarkRun(String moduleName, String commitId, long commitMsEpoch) {
     this.moduleName = moduleName;
     this.commitId = commitId;
-    this.commitDate = commitDate;
+    this.commitMsEpoch = commitMsEpoch;
     state = State.NOT_RUN;
   }
 
@@ -123,8 +123,8 @@ public class BenchmarkRun {
     result.setRunsPerSecond(runsPerSecond);
   }
 
-  public String getCommitDate() {
-    return commitDate;
+  public long getCommitMsEpoch() {
+    return commitMsEpoch;
   }
 
   public String getCommitId() {

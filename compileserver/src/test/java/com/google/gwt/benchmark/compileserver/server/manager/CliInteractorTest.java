@@ -132,14 +132,8 @@ public class CliInteractorTest {
 
   @Test
   public void testGetDateForCommit() throws BenchmarkManagerException {
-    String date = scriptInteractor.getDateForCommit("asdf1");
-    // Cut off new line char
-    date = date.substring(0, date.length() - 1);
-
-    String[] split = date.split(";");
-    Assert.assertEquals(2, split.length);
-    Assert.assertEquals(gwtSourceLocation.getAbsolutePath(), split[0]);
-    Assert.assertEquals("asdf1", split[1]);
+    long date = scriptInteractor.getDateForCommitInMsEpoch("asdf1");
+    Assert.assertEquals(1234987000L, date);
   }
 
   @Test
@@ -147,7 +141,7 @@ public class CliInteractorTest {
     scriptInteractor = new CliInteractor(scriptDirectoryFail, persistenceDir, gwtSourceLocation,
         benchmarkSourceLocation);
     try {
-      scriptInteractor.getDateForCommit("commitId1");
+      scriptInteractor.getDateForCommitInMsEpoch("commitId1");
       Assert.fail("Expected exception did not occur");
     } catch (BenchmarkManagerException e) {
       Assert.assertEquals("Command returned with 1 commitDate: This is my errormessage!\n",

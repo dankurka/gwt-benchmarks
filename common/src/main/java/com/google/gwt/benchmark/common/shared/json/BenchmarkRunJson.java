@@ -23,15 +23,29 @@ import java.util.Map;
  */
 public interface BenchmarkRunJson {
 
+  String getCommitId();
+
+  /**
+   * Get the commit time of the patch in milliseconds since 1970.
+   * <p>
+   * Note: This is not the author time of the commit, but the time it has been merged into the
+   * repository
+   */
+  double getCommitTimeMsEpoch();
+
+  Map<String, List<BenchmarkResultJson>> getResultByBenchmarkName();
+
   void setResultByBenchmarkName(Map<String, List<BenchmarkResultJson>> results);
 
   void setCommitId(String commitId);
 
   void setCommitTime(String commitTime);
 
-  String getCommitTime();
-
-  String getCommitId();
-
-  Map<String, List<BenchmarkResultJson>> getResultByBenchmarkName();
+  /**
+   * Set the commit time of the patch in milliseconds since 1970.
+   * <p>
+   * Note: This is not the author time of the commit, but the time it has been merged into the
+   * repository
+   */
+  void setCommitTimeMsEpoch(double commitMsEpoch);
 }
