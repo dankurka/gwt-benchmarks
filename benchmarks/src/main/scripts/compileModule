@@ -15,4 +15,5 @@ GWT_USER_JAR=${3}
 BENCHMARKS_SRC=${4}
 OUTPUT_DIR=${5}
 
-java -cp ${GWT_DEV_JAR}:${GWT_USER_JAR}:${BENCHMARKS_SRC} com.google.gwt.dev.Compiler -style PRETTY -war ${OUTPUT_DIR} "${MODULE_NAME}"
+java -Dgwt.persistentunitcache=false -cp ${GWT_DEV_JAR}:${GWT_USER_JAR}:${BENCHMARKS_SRC} \
+    com.google.gwt.dev.Compiler -style PRETTY -war ${OUTPUT_DIR} "${MODULE_NAME}"
