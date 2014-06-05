@@ -47,6 +47,7 @@ public class Settings {
       settings.ipAddress = Util.getFirstNonLoopbackAddress().getHostAddress();
       settings.reportResults = prop.getProperty("reportResuts").equals("true");
       settings.reporterUrl = prop.getProperty("reporterUrl");
+      settings.reporterSecret = prop.getProperty("reporterSecret");
       settings.mode =
           prop.getProperty("mode").equals("server") ? ManagerMode.SERVER : ManagerMode.LOCAL;
       settings.persistenceDir = new File(prop.getProperty("persistenceDir"));
@@ -85,6 +86,7 @@ public class Settings {
   private int threadPoolSize;
   private boolean reportResults;
   private String reporterUrl;
+  private String reporterSecret;
   private File persistenceDir;
   private ManagerMode mode;
   private File gwtSourceLocation;
@@ -125,6 +127,10 @@ public class Settings {
 
   public String getReporterUrl() {
     return reporterUrl;
+  }
+
+  public String getReporterSecret() {
+    return reporterSecret;
   }
 
   public ManagerMode getMode() {

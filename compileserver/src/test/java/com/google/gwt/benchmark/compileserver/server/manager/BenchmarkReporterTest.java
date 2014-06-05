@@ -85,13 +85,14 @@ public class BenchmarkReporterTest {
     Mockito.when(urlConnection.getOutputStream()).thenReturn(outputStream);
     Mockito.when(urlConnection.getResponseCode()).thenReturn(200);
 
-    reporter =
-        new BenchmarkReporter(urlFactory, results, commitId, commitDate, reportProgressHandler);
+    reporter = new BenchmarkReporter(urlFactory, "auth1", results, commitId, commitDate,
+        reportProgressHandler);
 
     reporter.run();
 
     Mockito.verify(outputStream).close();
     Mockito.verify(urlConnection).setRequestMethod("PUT");
+    Mockito.verify(urlConnection).addRequestProperty("auth", "auth1");
     ArgumentCaptor<byte[]> captor = ArgumentCaptor.forClass(byte[].class);
     Mockito.verify(outputStream).write(captor.capture());
 
@@ -142,15 +143,15 @@ public class BenchmarkReporterTest {
 
     final List<Integer> waitingTimes = new ArrayList<>();
 
-    reporter =
-        new BenchmarkReporter(urlFactory, results, commitId, commitDate, reportProgressHandler) {
+    reporter = new BenchmarkReporter(urlFactory, "auth1", results, commitId, commitDate,
+        reportProgressHandler) {
 
-          @Override
-          boolean sleep(int seconds) {
-            waitingTimes.add(seconds);
-            return true;
-          }
-        };
+      @Override
+      boolean sleep(int seconds) {
+        waitingTimes.add(seconds);
+        return true;
+      }
+    };
 
     reporter.run();
 

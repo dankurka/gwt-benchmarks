@@ -19,6 +19,7 @@ import com.google.gwt.benchmark.common.shared.json.JsonFactory;
 import com.google.gwt.benchmark.compileserver.server.manager.BenchmarkRun.Result;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
+import com.google.inject.name.Named;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 import com.google.web.bindery.autobean.shared.AutoBeanUtils;
@@ -73,12 +74,15 @@ public class BenchmarkReporter implements Runnable {
 
   private final long commitMsEpoch;
 
+  private String reporterSecret;
+
   @Inject
   public BenchmarkReporter(HttpURLConnectionFactory httpURLConnectionFactory,
-      @Assisted Map<String, BenchmarkRun> results, @Assisted("commitId") String commitId,
-      @Assisted("commitDate") long commitMsEpoch,
+      @Named("reporterSecret") String reporterSecret, @Assisted Map<String, BenchmarkRun> results,
+      @Assisted("commitId") String commitId, @Assisted("commitDate") long commitMsEpoch,
       @Assisted ReportProgressHandler reportProgressHandler) {
     this.httpURLConnectionFactory = httpURLConnectionFactory;
+    this.reporterSecret = reporterSecret;
     this.results = results;
     this.commitId = commitId;
     this.commitMsEpoch = commitMsEpoch;
@@ -145,6 +149,7 @@ public class BenchmarkReporter implements Runnable {
     try {
 
       HttpURLConnection httpCon = httpURLConnectionFactory.create();
+      httpCon.addRequestProperty("auth", reporterSecret);
       httpCon.setDoOutput(true);
       httpCon.setRequestMethod("PUT");
 

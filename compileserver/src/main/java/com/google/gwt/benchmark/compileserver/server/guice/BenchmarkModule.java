@@ -79,6 +79,8 @@ public class BenchmarkModule extends AbstractModule {
         .toInstance(settings.getScriptsDirectory());
     bind(Boolean.class).annotatedWith(Names.named("useReporter"))
         .toInstance(settings.reportResults());
+    bind(String.class).annotatedWith(Names.named("reporterSecret")).toInstance(
+        settings.getReporterSecret());
     bind(String.class).annotatedWith(Names.named("benchmarkDashboardUrl"))
         .toInstance(settings.getReporterUrl());
     bind(File.class).annotatedWith(Names.named("persistenceDir"))
