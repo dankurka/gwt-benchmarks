@@ -428,8 +428,20 @@ public class BenchmarkManager {
           break;
 
         case SUCCESSFUL_RUN:
-          setLastCommit(currentCommitId);
-          state = State.IDLE;
+          try {
+            cliInteractor.storeCommitId(currentCommitId);
+            setLastCommit(currentCommitId);
+            state = State.IDLE;
+          } catch (BenchmarkManagerException e) {
+            logger.log(Level.WARNING, "Can not store last commitId", e);
+            reportError("Can not store last commitId - quitting");
+            try {
+              pool.shutdown();
+              pool.awaitTermination(30, TimeUnit.SECONDS);
+            } catch (InterruptedException i) {
+            }
+            return;
+          }
           break;
         default:
           logger.severe("Hit default case");
