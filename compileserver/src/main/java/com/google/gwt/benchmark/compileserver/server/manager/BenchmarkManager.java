@@ -461,6 +461,12 @@ public class BenchmarkManager {
         continue;
       }
 
+      // TODO(dankurka): fix navier and remove this
+      if (benchmarkModuleName.endsWith("NavierStokesBenchmarkGWT"))
+      {
+        continue;
+      }
+
       BenchmarkRun br = createBenchmarkRunForModule(benchmarkModuleName, commitId,
           currentCommitDateMsEpoch);
       addBenchmarkRun(br);
