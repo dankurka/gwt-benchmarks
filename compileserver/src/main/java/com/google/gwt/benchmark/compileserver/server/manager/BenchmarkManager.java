@@ -282,7 +282,7 @@ public class BenchmarkManager {
   private BenchmarkRun createBenchmarkRunForModule(String moduleName, String commitId,
       long currentCommitDateMsEpoch) {
     BenchmarkRun br = new BenchmarkRun(moduleName, commitId, currentCommitDateMsEpoch);
-    br.addRunner(RunnerConfigs.FIREFOX_LINUX);
+    br.addRunner(RunnerConfigs.CHROME_LINUX);
     return br;
   }
 

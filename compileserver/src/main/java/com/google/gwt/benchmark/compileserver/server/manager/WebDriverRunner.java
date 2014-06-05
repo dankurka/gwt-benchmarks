@@ -55,7 +55,7 @@ public class WebDriverRunner implements Runner {
   public void run() {
     logger.info("Starting webdriver for " + url);
     // TODO use right capabilities
-    DesiredCapabilities capabilities = DesiredCapabilities.firefox();
+    DesiredCapabilities capabilities = DesiredCapabilities.chrome();
     RemoteWebDriver driver = null;
     try {
       driver = new RemoteWebDriver(hubURL, capabilities);
