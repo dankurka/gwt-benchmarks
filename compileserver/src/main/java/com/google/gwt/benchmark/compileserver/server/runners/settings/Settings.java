@@ -39,7 +39,7 @@ public class Settings {
       settings.benchmarkRootDirectory = new File(prop.getProperty("benchmarksDirectory"));
 
       settings.moduleTemplate =
-          loadModuleTemplate(settingsFile.getParentFile(), prop.getProperty("moduleTemplate"));
+          loadModuleTemplate(prop.getProperty("moduleTemplate"));
       settings.hubUrl = new URL(prop.getProperty("seleniumHubUrl"));
       settings.benchmarkCompileOutputDir = new File(prop.getProperty("compileOutputDir"));
       settings.threadPoolSize = Integer.parseInt(prop.getProperty("threadPoolSize"));
@@ -66,11 +66,11 @@ public class Settings {
     return settings;
   }
 
-  private static String loadModuleTemplate(File parent, String fileName) throws IOException {
+  private static String loadModuleTemplate(String fileName) throws IOException {
     FileInputStream inputStream = null;
 
     try {
-      inputStream = new FileInputStream(new File(parent, fileName));
+      inputStream = new FileInputStream(new File(fileName));
       return IOUtils.toString(inputStream, "UTF-8");
     } finally {
       IOUtils.closeQuietly(inputStream);
