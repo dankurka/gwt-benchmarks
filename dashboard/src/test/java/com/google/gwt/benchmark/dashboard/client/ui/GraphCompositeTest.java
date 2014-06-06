@@ -23,13 +23,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 import com.google.gwt.visualization.client.DataTable;
-import com.google.gwt.visualization.client.visualizations.LineChart;
+import com.google.gwt.visualization.client.visualizations.corechart.AxisOptions;
+import com.google.gwt.visualization.client.visualizations.corechart.Options;
 import com.google.gwtmockito.GwtMockitoTestRunner;
 import com.google.inject.Provider;
 
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -68,7 +70,7 @@ public class GraphCompositeTest {
   @Mock private Provider<CheckBox> checkBoxProvider;
   @Mock private HistoryAccessor historyAccessor;
   @Mock DataTable data;
-  @Mock LineChart.Options options;
+  @Mock Options options;
   @Mock ValueChangeEvent<Boolean> vce;
 
   @Captor private ArgumentCaptor<AsyncCallback<BenchmarkResultsTable>> asyncCaptor;
@@ -198,7 +200,10 @@ public class GraphCompositeTest {
 
     verify(composite.graphWidget).createData();
     verify(composite.graphWidget).createOptions();
+    verify(composite.graphWidget, times(2)).createAxisOptions();
     verify(composite.graphWidget).displayChart(options, data);
+    verify(options).setHAxisOptions(Mockito.<AxisOptions> anyObject());
+    verify(options).setVAxisOptions(Mockito.<AxisOptions> anyObject());
 
     verifyNoMoreInteractions(composite.graphWidget, data, options);
 

@@ -17,8 +17,9 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.visualization.client.DataTable;
 import com.google.gwt.visualization.client.VisualizationUtils;
-import com.google.gwt.visualization.client.visualizations.LineChart;
-import com.google.gwt.visualization.client.visualizations.LineChart.Options;
+import com.google.gwt.visualization.client.visualizations.corechart.AxisOptions;
+import com.google.gwt.visualization.client.visualizations.corechart.Options;
+import com.google.gwt.visualization.client.visualizations.corechart.LineChart;
 
 /**
  * This widget provides access to the visualization API.
@@ -37,6 +38,10 @@ public class GraphWidget extends Composite {
 
   public Options createOptions() {
     return Options.create();
+  }
+
+  public AxisOptions createAxisOptions() {
+    return AxisOptions.create();
   }
 
   public void clear() {

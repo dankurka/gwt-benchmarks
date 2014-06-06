@@ -36,7 +36,8 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 import com.google.gwt.visualization.client.DataTable;
-import com.google.gwt.visualization.client.visualizations.LineChart.Options;
+import com.google.gwt.visualization.client.visualizations.corechart.AxisOptions;
+import com.google.gwt.visualization.client.visualizations.corechart.Options;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
@@ -166,7 +167,17 @@ public class GraphComposite extends Composite {
     Options options = graphWidget.createOptions();
     options.setWidth(800);
     options.setHeight(600);
+
     options.setTitle(result.getBenchmarkName());
+
+    AxisOptions vAxisOptions = graphWidget.createAxisOptions();
+    vAxisOptions.setMinValue(0);
+    options.setVAxisOptions(vAxisOptions);
+
+    AxisOptions hAxisOptions = graphWidget.createAxisOptions();
+    hAxisOptions.setTextPosition("none");
+    options.setHAxisOptions(hAxisOptions);
+
     graphWidget.displayChart(options, data);
   }
 
