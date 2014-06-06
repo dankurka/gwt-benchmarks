@@ -9,4 +9,5 @@ fi
 SOURCE_LOCATION=${1}
 
 cd ${SOURCE_LOCATION}
+ant clean
 ant dist-dev
