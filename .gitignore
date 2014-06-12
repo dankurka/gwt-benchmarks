@@ -12,4 +12,12 @@ compileserver/.settings/
 common/target/
 compileserver/target/
 launcher/target/
-
+dashboard/.classpath
+dashboard/.project
+dashboard/.settings/
+dashboard/target/
+launcher/.classpath
+launcher/.project
+launcher/.settings/
+launcher/target/
+tomcat/
