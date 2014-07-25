@@ -283,6 +283,9 @@ public class BenchmarkManager {
       long currentCommitDateMsEpoch) {
     BenchmarkRun br = new BenchmarkRun(moduleName, commitId, currentCommitDateMsEpoch);
     br.addRunner(RunnerConfigs.CHROME_LINUX);
+    br.addRunner(RunnerConfigs.FIREFOX_LINUX);
+    br.addRunner(RunnerConfigs.IE10_WIN);
+    br.addRunner(RunnerConfigs.IE11_WIN);
     return br;
   }
 

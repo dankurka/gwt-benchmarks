@@ -18,6 +18,9 @@ package com.google.gwt.benchmark.compileserver.server.manager;
  */
 public interface RunnerConfig {
 
+  public static final String IE_10_VERSION = "IE10";
+  public static final String IE_11_VERSION = "IE11";
+
   /**
    * Enum for all supported browsers.
    */

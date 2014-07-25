@@ -60,6 +60,12 @@ public final class RunnerConfigs {
   /** Firefox on linux */
   public static final RunnerConfig FIREFOX_LINUX =
       new RunnerConfigImpl(Browser.FIREFOX, OS.LINUX, "");
+  /** IE11 on windows */
+  public static final RunnerConfig IE11_WIN =
+      new RunnerConfigImpl(Browser.INTERNET_EXPLORER, OS.WINDOWS, RunnerConfig.IE_11_VERSION);
+  /** IE10 on windows */
+  public static final RunnerConfig IE10_WIN =
+      new RunnerConfigImpl(Browser.INTERNET_EXPLORER, OS.WINDOWS, RunnerConfig.IE_10_VERSION);
 
   private RunnerConfigs() {}
 }

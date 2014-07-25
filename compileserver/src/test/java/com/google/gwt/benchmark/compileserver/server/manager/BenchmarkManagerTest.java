@@ -168,8 +168,15 @@ public class BenchmarkManagerTest {
     // TODO right now there is only one runner, needs updating
     // simulate benchmarks done
     progressHandlers.get(0).onResult(workerConfigs.get(0).getRunners().get(0), 1);
+    progressHandlers.get(0).onResult(workerConfigs.get(0).getRunners().get(1), 2);
+    progressHandlers.get(0).onResult(workerConfigs.get(0).getRunners().get(2), 3);
+    progressHandlers.get(0).onResult(workerConfigs.get(0).getRunners().get(3), 4);
     progressHandlers.get(0).onRunEnded();
-    progressHandlers.get(1).onResult(workerConfigs.get(0).getRunners().get(0), 2);
+
+    progressHandlers.get(1).onResult(workerConfigs.get(0).getRunners().get(0), 5);
+    progressHandlers.get(1).onResult(workerConfigs.get(0).getRunners().get(1), 6);
+    progressHandlers.get(1).onResult(workerConfigs.get(0).getRunners().get(2), 7);
+    progressHandlers.get(1).onResult(workerConfigs.get(0).getRunners().get(3), 8);
     progressHandlers.get(1).onRunEnded();
 
     Mockito.verify(benchmarkReporter, timeout).run();
@@ -188,13 +195,31 @@ public class BenchmarkManagerTest {
     Assert.assertEquals(1,
         benchmarkRun.getResults().get(benchmarkRun.getRunConfigs().get(0)).getRunsPerSecond(),
         0.0001);
+    Assert.assertEquals(2,
+        benchmarkRun.getResults().get(benchmarkRun.getRunConfigs().get(1)).getRunsPerSecond(),
+        0.0001);
+    Assert.assertEquals(3,
+        benchmarkRun.getResults().get(benchmarkRun.getRunConfigs().get(2)).getRunsPerSecond(),
+        0.0001);
+    Assert.assertEquals(4,
+        benchmarkRun.getResults().get(benchmarkRun.getRunConfigs().get(3)).getRunsPerSecond(),
+        0.0001);
 
     benchmarkRun = map.get("module2");
     Assert.assertEquals("commit2", benchmarkRun.getCommitId());
     Assert.assertEquals("module2", benchmarkRun.getModuleName());
     Assert.assertEquals(BenchmarkRun.State.DONE, benchmarkRun.getState());
-    Assert.assertEquals(2,
+    Assert.assertEquals(5,
         benchmarkRun.getResults().get(benchmarkRun.getRunConfigs().get(0)).getRunsPerSecond(),
+        0.0001);
+    Assert.assertEquals(6,
+        benchmarkRun.getResults().get(benchmarkRun.getRunConfigs().get(1)).getRunsPerSecond(),
+        0.0001);
+    Assert.assertEquals(7,
+        benchmarkRun.getResults().get(benchmarkRun.getRunConfigs().get(2)).getRunsPerSecond(),
+        0.0001);
+    Assert.assertEquals(8,
+        benchmarkRun.getResults().get(benchmarkRun.getRunConfigs().get(3)).getRunsPerSecond(),
         0.0001);
 
     // tell benchmark manager that we reported successfully

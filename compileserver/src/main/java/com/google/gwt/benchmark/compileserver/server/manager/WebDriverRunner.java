@@ -35,6 +35,28 @@ public class WebDriverRunner implements Runner {
   private static final int TIMEOUT_MS = 60000;
   private static final Logger logger = Logger.getLogger(WebDriverRunner.class.getName());
 
+  private static DesiredCapabilities createCapabilities(RunnerConfig config) {
+    switch(config.getBrowser()) {
+      case CHROME:
+        return DesiredCapabilities.chrome();
+      case FIREFOX:
+        return DesiredCapabilities.firefox();
+      case INTERNET_EXPLORER:
+        DesiredCapabilities internetExplorer = DesiredCapabilities.internetExplorer();
+        if(RunnerConfig.IE_11_VERSION.equals(config.getBrowserVersion())) {
+          internetExplorer.setVersion("11");
+          return internetExplorer;
+        }
+        if(RunnerConfig.IE_10_VERSION.equals(config.getBrowserVersion())) {
+          internetExplorer.setVersion("10");
+          return internetExplorer;
+        }
+        throw new RuntimeException("No IE version for " + config.getBrowserVersion());
+      default:
+        throw new RuntimeException("No binding for " + config.getBrowser());
+    }
+  }
+
   private boolean done;
   private double result;
   private String errorMessage;
@@ -54,8 +76,8 @@ public class WebDriverRunner implements Runner {
   @Override
   public void run() {
     logger.info("Starting webdriver for " + url);
-    // TODO use right capabilities
-    DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+
+    DesiredCapabilities capabilities = createCapabilities(config);
     RemoteWebDriver driver = null;
     try {
       driver = new RemoteWebDriver(hubURL, capabilities);
