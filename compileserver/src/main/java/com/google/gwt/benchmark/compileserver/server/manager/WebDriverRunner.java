@@ -83,13 +83,14 @@ public class WebDriverRunner implements Runner {
       driver = new RemoteWebDriver(hubURL, capabilities);
       driver.navigate().to(url);
 
-      boolean isReady = (Boolean) driver.executeScript(IS_READY_JS, new Object[] {});
+      boolean isReady = false;
+//      boolean isReady = (Boolean) driver.executeScript(IS_READY_JS, new Object[] {});
       long startMs = System.currentTimeMillis();
 
       // Wait till the benchmark has finished running.
       while (!isReady) {
         try {
-          Thread.sleep(100);
+          Thread.sleep(10000);
         } catch (InterruptedException ignored) {
         }
         isReady = (Boolean) driver.executeScript(IS_READY_JS, new Object[] {});
