@@ -1,0 +1,4 @@
+#!/bin/bash
+
+ssh gwt@gwt-lab-firefox -L 10101:localhost:5901 -f sleep 10; \
+vncviewer localhost:10101

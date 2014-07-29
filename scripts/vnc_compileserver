@@ -1,0 +1,4 @@
+#!/bin/bash
+
+ssh gwt@gwt-lab-compileserver -L 10100:localhost:5901 -f sleep 10; \
+vncviewer localhost:10100

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+ssh gwt@gwt-lab-compileserver -L 10104:gwt-lab-ie11:3389 -f sleep 10; \
+rdesktop localhost:10104 -u gwt
