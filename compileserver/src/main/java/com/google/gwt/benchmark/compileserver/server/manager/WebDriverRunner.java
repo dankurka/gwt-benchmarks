@@ -83,17 +83,20 @@ public class WebDriverRunner implements Runner {
       driver = new RemoteWebDriver(hubURL, capabilities);
       driver.navigate().to(url);
 
-      boolean isReady = (Boolean) driver.executeScript(IS_READY_JS, new Object[] {});
       long startMs = System.currentTimeMillis();
 
-      // Wait till the benchmark has finished running.
-      while (!isReady) {
-        try {
-          Thread.sleep(100);
-        } catch (InterruptedException ignored) {
-        }
-        isReady = (Boolean) driver.executeScript(IS_READY_JS, new Object[] {});
+      // Initial wait since IE11 has issues running JS before the page has loaded
+      try {
+        Thread.sleep(1000);
+      } catch (InterruptedException ignored) {
+      }
 
+      // Wait till the benchmark has finished running.
+      while (true) {
+        boolean isReady = (Boolean) driver.executeScript(IS_READY_JS, new Object[] {});
+        if (isReady) {
+          break;
+        }
         if (System.currentTimeMillis() - startMs > TIMEOUT_MS) {
           this.failed = true;
           logger.info("Timeout webdriver for " + url);
@@ -101,6 +104,10 @@ public class WebDriverRunner implements Runner {
           failed = true;
           errorMessage = "Timeout";
           return;
+        }
+        try {
+          Thread.sleep(100);
+        } catch (InterruptedException ignored) {
         }
       }
 
