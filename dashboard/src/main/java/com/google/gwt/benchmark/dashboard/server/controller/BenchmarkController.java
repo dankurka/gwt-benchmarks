@@ -242,7 +242,7 @@ public class BenchmarkController {
 
     List<Double> runsPerSecond = new ArrayList<>(entityList.size());
     for (BenchmarkResult benchmarkResult : results) {
-      runsPerSecond.add(benchmarkResult.getRunsPerMinute());
+      runsPerSecond.add(benchmarkResult.getRunsPerSecond());
     }
 
     return new BenchmarkGraphData(commitIds, runsPerSecond);

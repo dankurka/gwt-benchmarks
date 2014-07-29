@@ -66,7 +66,7 @@ public class BenchmarkResult {
     entity.setProperty("runsPerSecond", runsPerMinute);
   }
 
-  public double getRunsPerMinute() {
+  public double getRunsPerSecond() {
     return (double) entity.getProperty("runsPerSecond");
   }
 

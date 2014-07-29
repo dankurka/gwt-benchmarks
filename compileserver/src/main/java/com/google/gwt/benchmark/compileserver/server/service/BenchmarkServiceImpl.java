@@ -97,11 +97,7 @@ public class BenchmarkServiceImpl extends RemoteServiceServlet implements Servic
   private static ArrayList<String> createRunnerDTOs(List<RunnerConfig> allRunners) {
     ArrayList<String> runnerNames = new ArrayList<>();
     for (RunnerConfig rc : allRunners) {
-      String name = rc.getOS() + " " + rc.getBrowser();
-      if (!"".equals(rc.getBrowserVersion())) {
-        name += " " + rc.getBrowserVersion();
-      }
-      runnerNames.add(name);
+      runnerNames.add(rc.toString());
     }
     return runnerNames;
   }
