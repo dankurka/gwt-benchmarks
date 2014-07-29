@@ -110,25 +110,25 @@ public class BenchmarkControllerTest {
     BenchmarkResult benchmarkResult = new BenchmarkResult(entity);
     Assert.assertEquals("module1", benchmarkResult.getBenchmarkName());
     Assert.assertEquals("firefox_linux", benchmarkResult.getRunnerId());
-    Assert.assertEquals(3, benchmarkResult.getRunsPerMinute(), 0.0001);
+    Assert.assertEquals(3, benchmarkResult.getRunsPerSecond(), 0.0001);
 
     entity = ds.get(module1Chrome);
     benchmarkResult = new BenchmarkResult(entity);
     Assert.assertEquals("module1", benchmarkResult.getBenchmarkName());
     Assert.assertEquals("chrome_linux", benchmarkResult.getRunnerId());
-    Assert.assertEquals(4, benchmarkResult.getRunsPerMinute(), 0.0001);
+    Assert.assertEquals(4, benchmarkResult.getRunsPerSecond(), 0.0001);
 
     entity = ds.get(module2FireFox);
     benchmarkResult = new BenchmarkResult(entity);
     Assert.assertEquals("module2", benchmarkResult.getBenchmarkName());
     Assert.assertEquals("firefox_linux", benchmarkResult.getRunnerId());
-    Assert.assertEquals(3, benchmarkResult.getRunsPerMinute(), 0.0001);
+    Assert.assertEquals(3, benchmarkResult.getRunsPerSecond(), 0.0001);
 
     entity = ds.get(module2Chrome);
     benchmarkResult = new BenchmarkResult(entity);
     Assert.assertEquals("module2", benchmarkResult.getBenchmarkName());
     Assert.assertEquals("chrome_linux", benchmarkResult.getRunnerId());
-    Assert.assertEquals(4, benchmarkResult.getRunsPerMinute(), 0.0001);
+    Assert.assertEquals(4, benchmarkResult.getRunsPerSecond(), 0.0001);
 
     LocalTaskQueue taskQueue = LocalTaskQueueTestConfig.getLocalTaskQueue();
 

@@ -50,7 +50,11 @@ public final class RunnerConfigs {
 
     @Override
     public String toString() {
-      return os + " " + browser;
+      String id =  os + " " + browser;
+      if (!"".equals(version)) {
+        id += " " + version;
+      }
+      return id;
     }
   }
 
