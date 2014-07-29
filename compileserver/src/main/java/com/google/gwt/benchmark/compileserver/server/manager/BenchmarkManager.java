@@ -226,7 +226,11 @@ public class BenchmarkManager {
   }
 
   public List<RunnerConfig> getAllRunners() {
-    return Arrays.asList(RunnerConfigs.FIREFOX_LINUX);
+    return Arrays.asList(
+        RunnerConfigs.FIREFOX_LINUX,
+        RunnerConfigs.CHROME_LINUX,
+        RunnerConfigs.IE10_WIN,
+        RunnerConfigs.IE11_WIN);
   }
 
   public synchronized boolean isRunning() {
@@ -282,10 +286,9 @@ public class BenchmarkManager {
   private BenchmarkRun createBenchmarkRunForModule(String moduleName, String commitId,
       long currentCommitDateMsEpoch) {
     BenchmarkRun br = new BenchmarkRun(moduleName, commitId, currentCommitDateMsEpoch);
-    br.addRunner(RunnerConfigs.CHROME_LINUX);
-    br.addRunner(RunnerConfigs.FIREFOX_LINUX);
-    br.addRunner(RunnerConfigs.IE10_WIN);
-    br.addRunner(RunnerConfigs.IE11_WIN);
+    for (RunnerConfig config : getAllRunners()) {
+      br.addRunner(config);
+    }
     return br;
   }
 
