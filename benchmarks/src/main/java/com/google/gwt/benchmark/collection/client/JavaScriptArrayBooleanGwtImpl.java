@@ -40,18 +40,22 @@ public final class JavaScriptArrayBooleanGwtImpl<T> extends JavaScriptObject imp
     return new Array(initialCapacity);
   }-*/;
 
+  @Override
   public native boolean get(int i) /*-{
     return this[i];
   }-*/;
 
+  @Override
   public native int length() /*-{
     return this.length;
   }-*/;
 
+  @Override
   public native void push(boolean t) /*-{
     return this.push(t);
   }-*/;
 
+  @Override
   public native void set(int index, boolean value) /*-{
     this[index] = value;
   }-*/;

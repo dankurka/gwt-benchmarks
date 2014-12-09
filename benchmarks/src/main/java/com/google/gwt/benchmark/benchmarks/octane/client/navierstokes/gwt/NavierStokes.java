@@ -74,6 +74,7 @@ public class NavierStokes implements FluidField.UICallback, DisplayFunction {
   int framesTillAddingPoints = 0;
   int framesBetweenAddingPoints = 5;
 
+  @Override
   public void prepareFrame(Field field) {
     if (framesTillAddingPoints == 0) {
       addPoints(field);
@@ -84,6 +85,7 @@ public class NavierStokes implements FluidField.UICallback, DisplayFunction {
     }
   }
 
+  @Override
   public void call(Field f) {
 
   }

@@ -202,6 +202,7 @@ public class SplayTree {
     final JavaScriptArrayNumber result = CollectionFactory.createNumber();
     if (!this.isEmpty()) {
       this.root_.traverse_(new Visitor() {
+        @Override
         public void call(Node n) {
           result.push(n.key);
         }

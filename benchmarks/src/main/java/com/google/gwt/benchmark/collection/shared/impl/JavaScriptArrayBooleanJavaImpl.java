@@ -33,14 +33,17 @@ public class JavaScriptArrayBooleanJavaImpl implements JavaScriptArrayBoolean {
     array = new boolean[capacity];
   }
 
+  @Override
   public boolean get(int i) {
     return array[i];
   }
 
+  @Override
   public int length() {
     return length;
   }
 
+  @Override
   public void push(boolean t) {
     if(length > array.length) {
       boolean[] newArray = new boolean[array.length * 2];
@@ -52,6 +55,7 @@ public class JavaScriptArrayBooleanJavaImpl implements JavaScriptArrayBoolean {
     length++;
   }
 
+  @Override
   public void set(int index, boolean value) {
     // This does not handle out of bounds access currently.
     // No benchmark has run into trouble so far.

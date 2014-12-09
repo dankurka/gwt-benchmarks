@@ -30,35 +30,43 @@ public final class BenchmarkResultJsImpl extends JavaScriptObject implements Ben
     return {name: "", numberOfRuns: 0, totalTimePassedMs: 0, timesForIndividualRunsMs: []};
   }-*/;
 
+  @Override
   public native String getName() /*-{
     return this.name;
   }-*/;
 
+  @Override
   public native int getNumberOfRuns() /*-{
     return this.numberOfRuns;
   }-*/;
 
+  @Override
   public native JavaScriptArrayNumber getTimesForIndividualRunsMs() /*-{
     return this.timesForIndividualRunsMs;
   }-*/;
 
+  @Override
   public native double getTotalTimePassedMs() /*-{
     return this.totalTimePassedMs;
   }-*/;
 
+  @Override
   public native void setName(String name) /*-{
     this.name = name;
   }-*/;
 
+  @Override
   public native void setNumberOfRuns(int runs) /*-{
     this.numberOfRuns = runs;
   }-*/;
 
+  @Override
   public native void setTimesForIndividualRunsMs(
       JavaScriptArrayNumber timesForIndividualRunsMs) /*-{
     this.timesForIndividualRunsMs = timesForIndividualRunsMs;
   }-*/;
 
+  @Override
   public native void setTotalTimePassed(double time) /*-{
     this.totalTimePassedMs = time;
   }-*/;

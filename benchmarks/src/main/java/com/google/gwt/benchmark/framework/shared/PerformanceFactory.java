@@ -25,12 +25,14 @@ import com.google.gwt.core.client.GWT;
 public final class PerformanceFactory {
 
   private static class PerformanceDefaultImpl implements Performance {
+    @Override
     public double now() {
       return System.currentTimeMillis();
     }
   }
 
   private static class PerformanceWindowPerformanceImpl implements Performance {
+    @Override
     public native double now() /*-{
       return $wnd.performance.now();
     }-*/;

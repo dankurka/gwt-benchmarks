@@ -41,14 +41,17 @@ public class JavaScriptArrayIntJavaImpl implements JavaScriptArrayInt {
     array = new int[initialCapacity];
   }
 
+  @Override
   public int get(int i) {
     return array[i];
   }
 
+  @Override
   public int length() {
     return length;
   }
 
+  @Override
   public void push(int t) {
     if (length >= array.length) {
       int[] newArray = new int[array.length * 2];
@@ -60,6 +63,7 @@ public class JavaScriptArrayIntJavaImpl implements JavaScriptArrayInt {
     length++;
   }
 
+  @Override
   public void set(int index, int value) {
     // This does not handle out of bounds access currently.
     // No benchmark has run into trouble so far.

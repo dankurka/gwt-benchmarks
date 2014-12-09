@@ -43,18 +43,22 @@ public class JavaScriptArrayJavaImpl<T> implements JavaScriptArray<T> {
     list = new ArrayList<T>(initialCapacity);
   }
 
+  @Override
   public T get(int i) {
     return list.get(i);
   }
 
+  @Override
   public int length() {
     return list.size();
   }
 
+  @Override
   public void push(T t) {
     list.add(t);
   }
 
+  @Override
   public void set(int index, T value) {
     // This does not handle out of bounds access currently.
     // No benchmark has run into trouble so far.

@@ -28,6 +28,7 @@ import com.google.gwt.core.client.GWT;
  */
 public abstract class AbstractBenchmarkEntryPoint implements EntryPoint {
 
+  @Override
   public void onModuleLoad() {
     try {
       maybePatchPerformanceNow();
@@ -37,8 +38,16 @@ public abstract class AbstractBenchmarkEntryPoint implements EntryPoint {
       double runsPerSecond =
           (benchmarkResult.getNumberOfRuns() * 1000) / benchmarkResult.getTotalTimePassedMs();
       update(runsPerSecond);
+      if (hasDom()) {
+        display("Result: " + runsPerSecond + " runs/second (Total runs: "
+            + benchmarkResult.getNumberOfRuns() + ", time: "
+            + benchmarkResult.getTotalTimePassedMs() + "ms)");
+      }
     } catch (Exception e) {
       setFailed();
+      if (hasDom()) {
+        display("Failed, see console!");
+      }
       GWT.log("Benchmark failed", e);
     }
   }
@@ -76,5 +85,20 @@ public abstract class AbstractBenchmarkEntryPoint implements EntryPoint {
   private native void setFailed() /*-{
     $wnd.__gwt__benchmarking__failed = true;
     $wnd.__gwt__benchmarking__ran = true;
+  }-*/;
+
+  /**
+   * Returns whether the current environment the code is executed in has a DOM.
+   */
+  private native boolean hasDom() /*-{
+    return !!($doc.createElement && $doc.createElement('div'))
+  }-*/;
+
+  private native void display(String s) /*-{
+    // This is intentionally not using GWT's DOM API since we do not want the
+    // framework to drag in extra dependencies.
+    var div = $doc.createElement('div');
+    div.textContent = s;
+    $doc.body.appendChild(div);
   }-*/;
 }

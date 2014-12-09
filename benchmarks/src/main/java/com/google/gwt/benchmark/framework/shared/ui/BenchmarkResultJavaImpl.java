@@ -28,34 +28,42 @@ public class BenchmarkResultJavaImpl implements BenchmarkResult {
   private JavaScriptArrayNumber timesForIndividualRunsMs;
   private String name;
 
+  @Override
   public String getName() {
     return name;
   }
 
+  @Override
   public int getNumberOfRuns() {
     return numberOfRuns;
   }
 
+  @Override
   public JavaScriptArrayNumber getTimesForIndividualRunsMs() {
     return timesForIndividualRunsMs;
   }
 
+  @Override
   public double getTotalTimePassedMs() {
     return totalTimePassedMs;
   }
 
+  @Override
   public void setName(String name) {
     this.name = name;
   }
 
+  @Override
   public void setNumberOfRuns(int numberOfRuns) {
     this.numberOfRuns = numberOfRuns;
   }
 
+  @Override
   public void setTimesForIndividualRunsMs(JavaScriptArrayNumber timesForIndividualRunsMs) {
     this.timesForIndividualRunsMs = timesForIndividualRunsMs;
   }
 
+  @Override
   public void setTotalTimePassed(double time) {
     this.totalTimePassedMs = time;
   }

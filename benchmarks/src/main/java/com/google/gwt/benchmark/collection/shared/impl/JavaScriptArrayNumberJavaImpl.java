@@ -41,14 +41,17 @@ public class JavaScriptArrayNumberJavaImpl implements JavaScriptArrayNumber {
     array = new double[initialCapacity];
   }
 
+  @Override
   public double get(int i) {
     return array[i];
   }
 
+  @Override
   public int length() {
     return length;
   }
 
+  @Override
   public void push(double t) {
     if (length >= array.length) {
       double[] newArray = new double[array.length * 2];
@@ -60,6 +63,7 @@ public class JavaScriptArrayNumberJavaImpl implements JavaScriptArrayNumber {
     length++;
   }
 
+  @Override
   public void set(int index, double value) {
     // This does not handle out of bounds access currently.
     // No benchmark has run into trouble so far.

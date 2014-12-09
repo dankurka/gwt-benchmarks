@@ -19,7 +19,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <!-- Using an older version of GWT here allows the benchmarks to execute against old      -->
     <!-- versions of the GWT SDK. This will help to find old commits that changed performance -->
-    <gwtversion>2.0.0</gwtversion>
+    <gwtversion>2.7.0</gwtversion>
   </properties>
 
   <dependencies>
@@ -40,6 +40,11 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.4</version>
+      </dependency>
   </dependencies>
 
   <build>
@@ -74,10 +79,8 @@
         <version>2.5.1</version>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <!-- enforcing java 1.5 so we can make sure benchmarks can be -->
-          <!-- compiled with old GWT versions -->
-          <source>1.5</source>
-          <target>1.5</target>
+          <source>1.7</source>
+          <target>1.7</target>
         </configuration>
       </plugin>
 
@@ -113,7 +116,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
-        <version>2.1.0</version>
+        <version>${gwtversion}</version>
         <executions>
           <execution>
             <goals>

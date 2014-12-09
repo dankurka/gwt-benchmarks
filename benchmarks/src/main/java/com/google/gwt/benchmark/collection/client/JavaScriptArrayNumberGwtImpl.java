@@ -40,18 +40,22 @@ public final class JavaScriptArrayNumberGwtImpl<T> extends JavaScriptObject impl
     return new Array(initialCapacity);
   }-*/;
 
+  @Override
   public native double get(int i) /*-{
     return this[i];
   }-*/;
 
+  @Override
   public native int length() /*-{
     return this.length;
   }-*/;
 
+  @Override
   public native void push(double t) /*-{
     return this.push(t);
   }-*/;
 
+  @Override
   public native void set(int index, double value) /*-{
     this[index] = value;
   }-*/;
