@@ -17,6 +17,8 @@ import com.google.gwt.benchmark.compileserver.server.manager.BenchmarkWorker.Pro
 import com.google.gwt.benchmark.compileserver.server.manager.Runner.Factory;
 import com.google.inject.Provider;
 
+import static org.mockito.Mockito.mock;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
@@ -49,6 +51,8 @@ public class BenchmarkWorkerTest {
   private Provider<String> randomStringProvider;
   private String moduleTemplate;
   private BenchmarkWorkerConfig benchmarkData;
+  private File devJar;
+  private File userJar;
 
   @Before
   public void setup() {
@@ -76,7 +80,12 @@ public class BenchmarkWorkerTest {
 
     moduleTemplate = "{module_nocache}";
 
-    benchmarkData = new BenchmarkWorkerConfig(moduleName, Arrays.asList(runnerConfig));
+
+    devJar = mock(File.class);
+    userJar = mock(File.class);
+
+    benchmarkData =
+        new BenchmarkWorkerConfig(moduleName, Arrays.asList(runnerConfig), devJar, userJar);
 
     progressHandler = Mockito.mock(ProgressHandler.class);
 
@@ -101,8 +110,8 @@ public class BenchmarkWorkerTest {
 
     String moduleTemplate = "mytemplate [{module_nocache}]";
     String moduleName = "moduleName1";
-    BenchmarkWorkerConfig benchmarkData =
-        new BenchmarkWorkerConfig(moduleName, Arrays.asList(RunnerConfigs.CHROME_LINUX));
+    BenchmarkWorkerConfig benchmarkData = new BenchmarkWorkerConfig(moduleName,
+        Arrays.asList(RunnerConfigs.CHROME_LINUX), devJar, userJar);
 
     ProgressHandler progressHandler = Mockito.mock(ProgressHandler.class);
     String ip = "127.0.0.1";
@@ -113,11 +122,12 @@ public class BenchmarkWorkerTest {
         benchmarkData, progressHandler, ip, 8080, benchmarkCompileOutputDir, randomStringProvider);
 
     Mockito.doThrow(new BenchmarkCompilerException("test")).when(compiler)
-        .compile(moduleName, workDir);
+        .compile(moduleName, workDir, devJar, userJar);
 
     worker.run();
 
-    Mockito.verify(compiler).compile(Mockito.eq(moduleName), Mockito.<File>anyObject());
+    Mockito.verify(compiler).compile(Mockito.eq(moduleName), Mockito.<File> anyObject(),
+        Mockito.eq(devJar), Mockito.eq(userJar));
     Mockito.verify(progressHandler).onCompilationFailed(Mockito.anyString());
     Mockito.verifyZeroInteractions(runnerProvider);
     Assert.assertFalse(workDir.exists());
@@ -140,7 +150,7 @@ public class BenchmarkWorkerTest {
 
     File workDir = new File(benchmarkCompileOutputDir, "randomDir1");
 
-    Mockito.verify(compiler).compile(moduleName, workDir);
+    Mockito.verify(compiler).compile(moduleName, workDir, devJar, userJar);
 
     Mockito.verify(runnerProvider).create(runnerConfig,
         "http://" + ip + ":" + port + "/__bench/randomDir1/" + moduleName + ".html");
@@ -166,7 +176,7 @@ public class BenchmarkWorkerTest {
     worker.run();
     File workDir = new File(benchmarkCompileOutputDir, "randomDir1");
 
-    Mockito.verify(compiler).compile(moduleName, workDir);
+    Mockito.verify(compiler).compile(moduleName, workDir, devJar, userJar);
 
     Mockito.verify(runnerProvider).create(runnerConfig,
         "http://" + ip + ":" + port + "/__bench/randomDir1/" + moduleName + ".html");
@@ -204,7 +214,7 @@ public class BenchmarkWorkerTest {
 
     File workDir = new File(benchmarkCompileOutputDir, "randomDir1");
 
-    Mockito.verify(compiler).compile(moduleName, workDir);
+    Mockito.verify(compiler).compile(moduleName, workDir, devJar, userJar);
 
     Mockito.verify(runnerProvider).create(runnerConfig,
         "http://" + ip + ":" + port + "/__bench/randomDir1/" + moduleName + ".html");

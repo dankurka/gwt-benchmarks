@@ -19,6 +19,7 @@ import com.google.gwt.benchmark.compileserver.shared.dto.BenchmarkOverviewRespon
 import com.google.gwt.benchmark.compileserver.shared.dto.BenchmarkRunDTO;
 import com.google.gwt.benchmark.compileserver.shared.dto.BenchmarkRunDTO.State;
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -32,6 +33,10 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FileUpload;
+import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -41,6 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * A view that displays the status of the compile server.
@@ -98,19 +104,61 @@ public class BenchmarkStatusComposite extends Composite {
   @UiField
   Button startStopButton;
 
+  @UiField
+  FormPanel formPanel;
+
+  @UiField
+  FileUpload fileUpload;
+
+  @UiField
+  Button uploadButton;
+
+  private boolean showFileUpload;
 
   @Inject
   public BenchmarkStatusComposite(ServiceAsync service, NumberFormat format,
-      Provider<Label> labelProvider) {
+      Provider<Label> labelProvider, @Named("fileUpload") boolean showFileUpload) {
     this.service = service;
     this.labelProvider = labelProvider;
     this.format = format;
+    this.showFileUpload = showFileUpload;
     initWidget(uiBinder.createAndBindUi(this));
+    formPanel.setVisible(this.showFileUpload);
+    formPanel.setAction("/compileserver/upload");
+    formPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
+    formPanel.setMethod(FormPanel.METHOD_POST);
+    if (showFileUpload) {
+      startStopButton.setEnabled(false);
+    }
+
+    uploadButton.setEnabled(false);
     bundle.css().ensureInjected();
   }
 
   public void start() {
     loadBenchmarks();
+  }
+
+  @UiHandler("fileUpload")
+  protected void onUpLoadChanged(@SuppressWarnings("unused") ChangeEvent event) {
+    uploadButton.setEnabled(!"".equals(fileUpload.getFilename()));
+  }
+
+  @UiHandler("uploadButton")
+  protected void onUploadButtonClicked(@SuppressWarnings("unused") ClickEvent event) {
+    formPanel.submit();
+  }
+
+  @UiHandler("formPanel")
+  public void onSubmitComplete(@SuppressWarnings("unused") SubmitCompleteEvent event) {
+    Window.alert("File: " + event.getResults());
+    uploadButton.setEnabled(true);
+    startStopButton.setEnabled(true);
+  }
+
+  @UiHandler("formPanel")
+  public void onSubmit(@SuppressWarnings("unused") SubmitEvent event) {
+    uploadButton.setEnabled(false);
   }
 
   @UiHandler("startStopButton")
@@ -130,9 +178,9 @@ public class BenchmarkStatusComposite extends Composite {
     };
 
     if (running) {
-      service.stopServer(callback);
+      service.stopServer(showFileUpload, callback);
     } else {
-      service.startServer(callback);
+      service.startServer(showFileUpload, callback);
     }
   }
 
@@ -154,7 +202,7 @@ public class BenchmarkStatusComposite extends Composite {
     statusText.setText("");
     startStopButton.setVisible(false);
 
-    service.loadBenchmarkOverview(new AsyncCallback<BenchmarkOverviewResponseDTO>() {
+    service.loadBenchmarkOverview(showFileUpload, new AsyncCallback<BenchmarkOverviewResponseDTO>() {
 
         @Override
       public void onFailure(Throwable caught) {

@@ -96,7 +96,8 @@ public class BenchmarkWorker implements Runnable {
     }
 
     try {
-      compiler.compile(benchmarkData.getModuleName(), outputDir);
+      compiler.compile(benchmarkData.getModuleName(), outputDir, benchmarkData.getDevJar(),
+          benchmarkData.getUserJar());
     } catch (BenchmarkCompilerException e) {
       cleanupDirectory(outputDir);
       progressHandler.onCompilationFailed(e.getMessage() + " " + e.getOutput());

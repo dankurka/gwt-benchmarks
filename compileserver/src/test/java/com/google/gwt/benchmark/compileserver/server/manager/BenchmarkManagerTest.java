@@ -25,6 +25,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.verification.VerificationWithTimeout;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,7 +52,8 @@ public class BenchmarkManagerTest {
         boolean useReporter,
         CliInteractor commitReader,
         Provider<Timer> timerProvider,
-        MailReporter errorReporter) {
+        MailReporter errorReporter,
+        File gwtSourceLocation) {
       super(collector,
           benchmarkWorkerFactory,
           poolProvider,
@@ -59,7 +61,8 @@ public class BenchmarkManagerTest {
           useReporter,
           commitReader,
           timerProvider,
-          errorReporter);
+          errorReporter,
+          gwtSourceLocation);
     }
 
     @Override
@@ -85,6 +88,7 @@ public class BenchmarkManagerTest {
   private BenchmarkReporter benchmarkReporter;
   private MailReporter errorReporter;
   private Timer timer;
+  private File gwtSourceLocation;
 
   @Before
   public void setup() {
@@ -99,6 +103,7 @@ public class BenchmarkManagerTest {
     benchmarkReporter = Mockito.mock(BenchmarkReporter.class);
     errorReporter = Mockito.mock(MailReporter.class);
     timer = Mockito.mock(Timer.class);
+    gwtSourceLocation = new File("");
   }
 
   @Test
@@ -113,7 +118,8 @@ public class BenchmarkManagerTest {
         true,
         commitReader,
         timerProvider,
-        errorReporter);
+        errorReporter,
+        gwtSourceLocation);
 
     Mockito.when(commitReader.getLastCommitId()).thenReturn("commit1");
     Mockito.when(commitReader.getCurrentCommitId()).thenReturn("commit2");
@@ -260,7 +266,8 @@ public class BenchmarkManagerTest {
         true,
         commitReader,
         timerProvider,
-        errorReporter);
+        errorReporter,
+        gwtSourceLocation);
 
     Mockito.when(commitReader.getLastCommitId()).thenThrow(new BenchmarkManagerException(""));
 
@@ -290,7 +297,8 @@ public class BenchmarkManagerTest {
         true,
         commitReader,
         timerProvider,
-        errorReporter);
+        errorReporter,
+        gwtSourceLocation);
 
     Mockito.when(commitReader.getDateForCommitInMsEpoch(Mockito.anyString())).thenThrow(
         new BenchmarkManagerException(""));
@@ -321,7 +329,8 @@ public class BenchmarkManagerTest {
         true,
         commitReader,
         timerProvider,
-        errorReporter);
+        errorReporter,
+        gwtSourceLocation);
 
     Mockito.doThrow(new BenchmarkManagerException("")).when(commitReader)
         .checkout(Mockito.anyString());
@@ -354,7 +363,8 @@ public class BenchmarkManagerTest {
         true,
         commitReader,
         timerProvider,
-        errorReporter);
+        errorReporter,
+        gwtSourceLocation);
 
     Mockito.when(commitReader.getLastCommitId()).thenReturn("commit1");
     Mockito.when(commitReader.getCurrentCommitId()).thenReturn("commit2");
@@ -453,7 +463,8 @@ public class BenchmarkManagerTest {
         true,
         commitReader,
         timerProvider,
-        errorReporter);
+        errorReporter,
+        gwtSourceLocation);
 
     Mockito.when(commitReader.getLastCommitId()).thenReturn("commit1");
     Mockito.when(commitReader.getCurrentCommitId()).thenReturn("commit2");
@@ -553,7 +564,8 @@ public class BenchmarkManagerTest {
         true,
         commitReader,
         timerProvider,
-        errorReporter) {
+        errorReporter,
+        gwtSourceLocation) {
 
       @Override
       void addBenchmarkRunSynchronized(Map<String, BenchmarkRun> runsByName, BenchmarkRun br) {

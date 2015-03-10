@@ -47,6 +47,8 @@ public class CliInteractorTest {
   private File compilerOutputDir;
   private CliInteractor scriptInteractor;
   private File scriptDirectoryFail;
+  private File devJar;
+  private File userJar;
 
   @Before
   public void setup() {
@@ -57,6 +59,8 @@ public class CliInteractorTest {
     gwtSourceLocation = new File("./target/fakesource/");
     benchmarkSourceLocation = new File("./target/fakebenchmark/");
     compilerOutputDir = new File("./target/compilerout/");
+    devJar = new File(gwtSourceLocation, "build/staging/gwt-0.0.0/gwt-dev.jar");
+    userJar = new File(gwtSourceLocation, "build/staging/gwt-0.0.0/gwt-user.jar");
 
     scriptInteractor = new CliInteractor(scriptDirectory, persistenceDir, gwtSourceLocation,
         benchmarkSourceLocation);
@@ -65,7 +69,7 @@ public class CliInteractorTest {
 
   @Test
   public void testCompileModule() throws BenchmarkCompilerException, IOException {
-    scriptInteractor.compile("myModule1", compilerOutputDir);
+    scriptInteractor.compile("myModule1", compilerOutputDir, devJar, userJar);
 
     FileInputStream inputStream = null;
     try {
@@ -79,11 +83,11 @@ public class CliInteractorTest {
 
       Assert.assertEquals("myModule1", split[0]);
       Assert.assertEquals(
-          new File(gwtSourceLocation, "build/staging/gwt-0.0.0/gwt-dev.jar").getAbsolutePath(),
+          devJar.getAbsolutePath(),
           new File(split[1]).getAbsolutePath());
 
       Assert.assertEquals(
-          new File(gwtSourceLocation, "build/staging/gwt-0.0.0/gwt-user.jar").getAbsolutePath(),
+          userJar.getAbsolutePath(),
           new File(split[2]).getAbsolutePath());
 
       Assert.assertEquals(benchmarkSourceLocation.getAbsolutePath(),
@@ -100,7 +104,7 @@ public class CliInteractorTest {
     scriptInteractor = new CliInteractor(scriptDirectoryFail, persistenceDir, gwtSourceLocation,
         benchmarkSourceLocation);
     try {
-      scriptInteractor.compile("myModule1", compilerOutputDir);
+      scriptInteractor.compile("myModule1", compilerOutputDir, devJar, userJar);
       Assert.fail("Expected exception did not occur");
     } catch (BenchmarkCompilerException e) {
       Assert.assertEquals("Command returned with 1 This is my errormessage!\n",

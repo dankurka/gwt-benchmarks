@@ -20,9 +20,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * Service interface to be injected into every object that needs data from the server.
  */
 public interface ServiceAsync {
-  void loadBenchmarkOverview(AsyncCallback<BenchmarkOverviewResponseDTO> callback);
+  void loadBenchmarkOverview(boolean single, AsyncCallback<BenchmarkOverviewResponseDTO> callback);
 
-  void startServer(AsyncCallback<Void> callback);
+  void startServer(boolean single, AsyncCallback<Void> callback);
 
-  void stopServer(AsyncCallback<Void> callback);
+  void stopServer(boolean single, AsyncCallback<Void> callback);
 }

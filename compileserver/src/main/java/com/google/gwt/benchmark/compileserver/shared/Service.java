@@ -24,9 +24,9 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("data/service")
 public interface Service extends RemoteService {
 
-  BenchmarkOverviewResponseDTO loadBenchmarkOverview() throws ServiceException;
+  BenchmarkOverviewResponseDTO loadBenchmarkOverview(boolean single) throws ServiceException;
 
-  void startServer();
+  void startServer(boolean single);
 
-  void stopServer();
+  void stopServer(boolean single);
 }

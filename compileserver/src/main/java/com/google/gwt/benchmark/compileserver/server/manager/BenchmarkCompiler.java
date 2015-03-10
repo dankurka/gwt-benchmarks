@@ -22,5 +22,5 @@ public interface BenchmarkCompiler {
   /**
    * Invokes the GWT compiler for the specified module.
    */
-  public void compile(String moduleName, File outputDir) throws BenchmarkCompilerException;
+  public void compile(String moduleName, File outputDir, File devJar, File userJar) throws BenchmarkCompilerException;
 }

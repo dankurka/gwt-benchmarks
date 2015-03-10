@@ -14,6 +14,7 @@
 package com.google.gwt.benchmark.compileserver.server.guice;
 
 import com.google.gwt.benchmark.compileserver.server.service.BenchmarkServiceImpl;
+import com.google.gwt.benchmark.compileserver.server.service.FileUploadServlet;
 import com.google.inject.Singleton;
 import com.google.inject.servlet.ServletModule;
 
@@ -50,5 +51,8 @@ public class CompileServerGuiceModule extends ServletModule {
 
     bind(BenchmarkServiceImpl.class).in(Singleton.class);
     serve("/compileserver/data/service").with(BenchmarkServiceImpl.class);
+
+    bind(FileUploadServlet.class).in(Singleton.class);
+    serve("/compileserver/upload").with(FileUploadServlet.class);
   }
 }

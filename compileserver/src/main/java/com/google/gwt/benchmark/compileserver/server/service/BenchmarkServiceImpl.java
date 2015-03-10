@@ -16,6 +16,7 @@ package com.google.gwt.benchmark.compileserver.server.service;
 import com.google.gwt.benchmark.common.shared.service.ServiceException;
 import com.google.gwt.benchmark.compileserver.server.manager.BenchmarkManager;
 import com.google.gwt.benchmark.compileserver.server.manager.BenchmarkRun;
+import com.google.gwt.benchmark.compileserver.server.manager.SingleRunBenchmarkManager;
 import com.google.gwt.benchmark.compileserver.server.manager.BenchmarkRun.Result;
 import com.google.gwt.benchmark.compileserver.server.manager.RunnerConfig;
 import com.google.gwt.benchmark.compileserver.shared.Service;
@@ -106,19 +107,26 @@ public class BenchmarkServiceImpl extends RemoteServiceServlet implements Servic
 
   private BenchmarkManager benchmarkManager;
 
+  private SingleRunBenchmarkManager singleRunBenchmarkManager;
+
   @Inject
-  public BenchmarkServiceImpl(BenchmarkManager benchmarkManager) {
+  public BenchmarkServiceImpl(BenchmarkManager benchmarkManager,
+      SingleRunBenchmarkManager singleRunBenchmarkManager) {
     this.benchmarkManager = benchmarkManager;
+    this.singleRunBenchmarkManager = singleRunBenchmarkManager;
   }
 
   @Override
-  public BenchmarkOverviewResponseDTO loadBenchmarkOverview() throws ServiceException {
+  public BenchmarkOverviewResponseDTO loadBenchmarkOverview(boolean single) throws ServiceException {
+
+    BenchmarkManager manager = single ? singleRunBenchmarkManager : benchmarkManager;
+
     try {
       BenchmarkOverviewResponseDTO response = new BenchmarkOverviewResponseDTO();
-      response.setRunnerNames(createRunnerDTOs(benchmarkManager.getAllRunners()));
+      response.setRunnerNames(createRunnerDTOs(manager.getAllRunners()));
 
-      Map<String, BenchmarkRun> latestRun = benchmarkManager.getLatestRun();
-      response.setExecutingBenchmarks(benchmarkManager.isRunning());
+      Map<String, BenchmarkRun> latestRun = manager.getLatestRun();
+      response.setExecutingBenchmarks(manager.isRunning());
 
       if (latestRun == null || latestRun.isEmpty()) {
         response.setHasLatestRun(false);
@@ -140,12 +148,21 @@ public class BenchmarkServiceImpl extends RemoteServiceServlet implements Servic
   }
 
   @Override
-  public void startServer() {
-    benchmarkManager.start();
+  public void startServer(boolean single) {
+    if (single) {
+      singleRunBenchmarkManager.setSDKDir(FileUploadServlet.getSdkFolder());
+      singleRunBenchmarkManager.start();
+    } else {
+      benchmarkManager.start();
+    }
   }
 
   @Override
-  public void stopServer() {
-    benchmarkManager.stop();
+  public void stopServer(boolean single) {
+    if (single) {
+      singleRunBenchmarkManager.stop();
+    } else {
+      benchmarkManager.stop();
+    }
   }
 }
