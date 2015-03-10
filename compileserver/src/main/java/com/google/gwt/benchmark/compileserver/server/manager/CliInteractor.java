@@ -67,14 +67,11 @@ public class CliInteractor implements BenchmarkCompiler {
   }
 
   @Override
-  public void compile(String moduleName, File compilerOutputDir) throws BenchmarkCompilerException {
+  public void compile(String moduleName, File compilerOutputDir, File devJar, File userJar)
+      throws BenchmarkCompilerException {
     logger.info("compiling: " + moduleName);
     File compileScript = new File(scriptDirectory, "compileModule");
 
-    String devjar =
-        new File(gwtSourceLocation, "build/staging/gwt-0.0.0/gwt-dev.jar").getAbsolutePath();
-    String userjar =
-        new File(gwtSourceLocation, "build/staging/gwt-0.0.0/gwt-user.jar").getAbsolutePath();
     String bsl = benchmarkSourceLocation.getAbsolutePath();
     if (!bsl.endsWith("/")) {
       bsl += "/";
@@ -82,8 +79,8 @@ public class CliInteractor implements BenchmarkCompiler {
 
     String outputDir = compilerOutputDir.getAbsolutePath();
     try {
-      runCommand(compileScript.getAbsolutePath() + " " + moduleName + " " + devjar + " " + userjar
-          + " " + bsl + " " + outputDir, false);
+      runCommand(compileScript.getAbsolutePath() + " " + moduleName + " " + devJar.getAbsolutePath()
+          + " " + userJar.getAbsolutePath() + " " + bsl + " " + outputDir, false);
     } catch (BenchmarkManagerException e) {
       throw new BenchmarkCompilerException("failed compile", e);
     }

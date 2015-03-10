@@ -21,6 +21,7 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -150,7 +151,7 @@ public class BenchmarkManager {
     EXIT, CHECK_FOR_UPDATES, RUN_BENCHMARKS, SUCCESSFUL_RUN, FAILED_RUN
   }
 
-  private enum State {
+  protected enum State {
     IDLE, RUNNING_BENCHMARKS
   }
 
@@ -164,7 +165,7 @@ public class BenchmarkManager {
 
   private long currentCommitDateMsEpoch;
 
-  private boolean currentlyRunning = false;
+  protected boolean currentlyRunning = false;
 
   private BlockingQueue<Command> commands = new LinkedBlockingQueue<>();
 
@@ -182,9 +183,9 @@ public class BenchmarkManager {
 
   private Factory reporterFactory;
 
-  private CliInteractor cliInteractor;
+  protected CliInteractor cliInteractor;
 
-  private State state = State.IDLE;
+  protected State state = State.IDLE;
 
   private Timer timer;
 
@@ -194,6 +195,10 @@ public class BenchmarkManager {
 
   private AtomicInteger workCount = new AtomicInteger();
 
+  protected File devJar;
+
+  protected File userJar;
+
   @Inject
   public BenchmarkManager(BenchmarkFinder collector,
       BenchmarkWorker.Factory benchmarkWorkerFactory,
@@ -202,7 +207,8 @@ public class BenchmarkManager {
       @Named("useReporter") boolean useReporter,
       CliInteractor commitReader,
       Provider<Timer> timerProvider,
-      MailReporter errorReporter) {
+      MailReporter errorReporter,
+      @Named("gwtSourceLocation") File gwtSourceLocation) {
     this.benchmarkFinder = collector;
     this.benchmarkWorkerFactory = benchmarkWorkerFactory;
     this.poolProvider = poolProvider;
@@ -211,6 +217,8 @@ public class BenchmarkManager {
     this.cliInteractor = commitReader;
     this.errorReporter = errorReporter;
     this.timerProvider = timerProvider;
+    devJar = new File(gwtSourceLocation, "build/staging/gwt-0.0.0/gwt-dev.jar");
+    userJar = new File(gwtSourceLocation, "build/staging/gwt-0.0.0/gwt-user.jar");
   }
 
   public String getLastCommitId() {
@@ -292,7 +300,7 @@ public class BenchmarkManager {
     return br;
   }
 
-  private void maybeReportResults(String commitId, long commitMsEpoch) {
+  protected void maybeReportResults(String commitId, long commitMsEpoch) {
     Map<String, BenchmarkRun> results;
     synchronized (benchmarkRunsByNameLock) {
       results = deepClone(benchmarkRunsByName);
@@ -343,7 +351,7 @@ public class BenchmarkManager {
     }
   }
 
-  private void runEventLoop() {
+  protected void runEventLoop() {
     state = State.IDLE;
     // check out last successful commit
     try {
@@ -456,7 +464,7 @@ public class BenchmarkManager {
     }
   }
 
-  private void reportError(String message) {
+  protected void reportError(String message) {
     errorReporter.sendEmail(message);
   }
 
@@ -466,7 +474,7 @@ public class BenchmarkManager {
     }
   }
 
-  private void startBenchmarkingAllForCommit(String commitId, long currentCommitDateMsEpoch) {
+  protected void startBenchmarkingAllForCommit(String commitId, long currentCommitDateMsEpoch) {
 
     pool = poolProvider.get();
 
@@ -491,8 +499,8 @@ public class BenchmarkManager {
 
       ProgressHandler progressHandler = new ThreadSafeProgressHandler(br);
 
-      BenchmarkWorker worker =
-          benchmarkWorkerFactory.create(BenchmarkWorkerConfig.from(br), progressHandler);
+      BenchmarkWorker worker = benchmarkWorkerFactory.create(
+          BenchmarkWorkerConfig.from(br, devJar, userJar), progressHandler);
       workCount.incrementAndGet();
 
       pool.execute(worker);

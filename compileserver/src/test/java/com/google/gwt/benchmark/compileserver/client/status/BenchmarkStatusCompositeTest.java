@@ -13,6 +13,7 @@
  */
 package com.google.gwt.benchmark.compileserver.client.status;
 
+import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -63,7 +64,7 @@ public class BenchmarkStatusCompositeTest {
   @Before
   public void setup() {
     messages.clear();
-    composite = new BenchmarkStatusComposite(service, numberFormat, labelProvider) {
+    composite = new BenchmarkStatusComposite(service, numberFormat, labelProvider, false) {
       @Override
       void alert(String message) {
         messages.add(message);
@@ -94,7 +95,7 @@ public class BenchmarkStatusCompositeTest {
     verify(composite.statusText).setText("");
     verify(composite.startStopButton).setVisible(false);
 
-    verify(service).loadBenchmarkOverview(asyncCaptor.capture());
+    verify(service).loadBenchmarkOverview(eq(false), asyncCaptor.capture());
 
     AsyncCallback<BenchmarkOverviewResponseDTO> asyncCallback = asyncCaptor.getValue();
 
@@ -126,7 +127,7 @@ public class BenchmarkStatusCompositeTest {
     verify(composite.statusText).setText("");
     verify(composite.startStopButton).setVisible(false);
 
-    verify(service).loadBenchmarkOverview(asyncCaptor.capture());
+    verify(service).loadBenchmarkOverview(eq(false), asyncCaptor.capture());
 
     AsyncCallback<BenchmarkOverviewResponseDTO> asyncCallback = asyncCaptor.getValue();
 

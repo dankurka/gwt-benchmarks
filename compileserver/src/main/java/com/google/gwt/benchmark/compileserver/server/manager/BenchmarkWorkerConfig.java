@@ -13,6 +13,7 @@
  */
 package com.google.gwt.benchmark.compileserver.server.manager;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,15 +23,20 @@ import java.util.List;
  * runners that the worker should launch.
  */
 public class BenchmarkWorkerConfig {
-  public static BenchmarkWorkerConfig from(BenchmarkRun run) {
-    return new BenchmarkWorkerConfig(run.getModuleName(), run.getRunConfigs());
+  public static BenchmarkWorkerConfig from(BenchmarkRun run, File devJar, File userJar) {
+    return new BenchmarkWorkerConfig(run.getModuleName(), run.getRunConfigs(), devJar, userJar);
   }
 
   private final String moduleName;
   private final List<RunnerConfig> runnerConfigs;
+  private final File devJar;
+  private final File userJar;
 
-  public BenchmarkWorkerConfig(String moduleName, List<RunnerConfig> runners) {
+  public BenchmarkWorkerConfig(String moduleName, List<RunnerConfig> runners, File devJar,
+      File userJar) {
     this.moduleName = moduleName;
+    this.devJar = devJar;
+    this.userJar = userJar;
     this.runnerConfigs = new ArrayList<>(runners);
   }
 
@@ -40,5 +46,13 @@ public class BenchmarkWorkerConfig {
 
   public List<RunnerConfig> getRunners() {
     return Collections.unmodifiableList(runnerConfigs);
+  }
+
+  public File getDevJar() {
+    return devJar;
+  }
+
+  public File getUserJar() {
+    return userJar;
   }
 }

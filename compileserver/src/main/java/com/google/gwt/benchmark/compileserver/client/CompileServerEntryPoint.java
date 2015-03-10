@@ -20,9 +20,12 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.inject.Provides;
+
+import javax.inject.Named;
 
 
 /**
@@ -44,6 +47,12 @@ public class CompileServerEntryPoint implements EntryPoint {
     @Provides
     protected Label providesLabel() {
       return new Label();
+    }
+
+    @Provides
+    @Named("fileUpload")
+    protected boolean showFileUpload () {
+      return Window.Location.getPath().contains("single.html");
     }
   }
 

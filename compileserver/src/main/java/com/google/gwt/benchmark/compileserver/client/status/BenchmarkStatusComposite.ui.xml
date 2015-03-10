@@ -8,5 +8,11 @@
     </g:FlowPanel>
     <g:Label ui:field="errorLabel"/>
     <g:Label ui:field="loadingLabel">Loading...</g:Label>
+    <g:FormPanel ui:field="formPanel">
+      <g:FlowPanel>
+        <g:FileUpload ui:field="fileUpload" name="file"></g:FileUpload>
+        <g:Button ui:field="uploadButton">Upload SDK</g:Button>
+      </g:FlowPanel>
+    </g:FormPanel>
   </g:HTMLPanel>
 </ui:UiBinder>
