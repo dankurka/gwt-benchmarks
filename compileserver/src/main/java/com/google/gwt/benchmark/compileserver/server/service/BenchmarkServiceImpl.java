@@ -148,21 +148,31 @@ public class BenchmarkServiceImpl extends RemoteServiceServlet implements Servic
   }
 
   @Override
-  public void startServer(boolean single) {
-    if (single) {
-      singleRunBenchmarkManager.setSDKDir(FileUploadServlet.getSdkFolder());
-      singleRunBenchmarkManager.start();
-    } else {
-      benchmarkManager.start();
+  public void startServer(boolean single) throws ServiceException {
+    try {
+      if (single) {
+        singleRunBenchmarkManager.setSDKDir(FileUploadServlet.getSdkFolder());
+        singleRunBenchmarkManager.start();
+      } else {
+        benchmarkManager.start();
+      }
+    } catch (Exception e) {
+      logger.log(Level.WARNING, "failed to start server", e);
+      throw new ServiceException("Failed to start server");
     }
   }
 
   @Override
-  public void stopServer(boolean single) {
-    if (single) {
-      singleRunBenchmarkManager.stop();
-    } else {
-      benchmarkManager.stop();
+  public void stopServer(boolean single) throws ServiceException {
+    try {
+      if (single) {
+        singleRunBenchmarkManager.stop();
+      } else {
+        benchmarkManager.stop();
+      }
+    } catch (Exception e) {
+      logger.log(Level.WARNING, "failed to start server", e);
+      throw new ServiceException("Failed to start server");
     }
   }
 }

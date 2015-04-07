@@ -26,7 +26,7 @@ public interface Service extends RemoteService {
 
   BenchmarkOverviewResponseDTO loadBenchmarkOverview(boolean single) throws ServiceException;
 
-  void startServer(boolean single);
+  void startServer(boolean single) throws ServiceException;
 
-  void stopServer(boolean single);
+  void stopServer(boolean single) throws ServiceException;
 }
