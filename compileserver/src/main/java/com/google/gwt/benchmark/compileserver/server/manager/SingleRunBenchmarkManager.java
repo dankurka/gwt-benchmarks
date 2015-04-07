@@ -57,12 +57,13 @@ public class SingleRunBenchmarkManager extends BenchmarkManager {
     // This is a dirty hack to get rid of files of an old run
     // but for now this is good enough...
     if (this.sdkFolder != null) {
-      FileUtils.deleteQuietly(sdkFolder);
+      FileUtils.deleteQuietly(this.sdkFolder);
     }
 
     this.sdkFolder = sdkFolder;
     if (!sdkFolder.isDirectory()) {
-      throw new IllegalArgumentException("sdkFolder does not point to a folder");
+      throw new IllegalArgumentException(
+          "sdkFolder does not point to a folder: " + sdkFolder.getAbsolutePath());
     }
 
     devJar = new File(sdkFolder, "gwt-dev.jar");
