@@ -83,4 +83,11 @@ public interface RunnerConfig {
    * @return the version of the browser for this config.
    */
   String getBrowserVersion();
+
+
+  /**
+   * Returns a human readable representation of this runner.
+   */
+  @Override
+  public String toString();
 }

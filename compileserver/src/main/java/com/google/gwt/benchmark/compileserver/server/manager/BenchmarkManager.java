@@ -102,7 +102,7 @@ public class BenchmarkManager {
         }
       }
       if (workCount.decrementAndGet() == 0) {
-        maybeReportResults(benchmarkRun.getCommitId(), benchmarkRun.getCommitMsEpoch());
+        maybeReportResults(benchmarkRun.getCommitId());
       }
     }
 
@@ -292,7 +292,7 @@ public class BenchmarkManager {
     return br;
   }
 
-  private void maybeReportResults(String commitId, long commitMsEpoch) {
+  private void maybeReportResults(String commitId) {
     Map<String, BenchmarkRun> results;
     synchronized (benchmarkRunsByNameLock) {
       results = deepClone(benchmarkRunsByName);
@@ -330,7 +330,7 @@ public class BenchmarkManager {
         commands.add(Command.SUCCESSFUL_RUN);
       }
     };
-    new Thread(reporterFactory.create(results, commitId, commitMsEpoch, p)).start();
+    new Thread(reporterFactory.create(results, commitId, p)).start();
   }
 
   private Command getNextCommand() {

@@ -15,6 +15,5 @@
         <module>common</module>
         <module>compileserver</module>
         <module>launcher</module>
-        <module>dashboard</module>
     </modules>
 </project>
