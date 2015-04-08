@@ -77,7 +77,7 @@ public class SingleRunBenchmarkManager extends BenchmarkManager {
   }
 
   @Override
-  protected void maybeReportResults(String commitId, long commitMsEpoch) {
+  protected void maybeReportResults(String commitId) {
     currentlyRunning = false;
   }
 }

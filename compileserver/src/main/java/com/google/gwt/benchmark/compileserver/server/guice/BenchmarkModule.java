@@ -13,6 +13,7 @@
  */
 package com.google.gwt.benchmark.compileserver.server.guice;
 
+import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gwt.benchmark.compileserver.server.manager.BenchmarkCompiler;
 import com.google.gwt.benchmark.compileserver.server.manager.BenchmarkReporter;
 import com.google.gwt.benchmark.compileserver.server.manager.BenchmarkWorker;
@@ -26,13 +27,12 @@ import com.google.gwt.benchmark.compileserver.server.runners.settings.Settings;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.google.inject.Provides;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -56,7 +56,6 @@ public class BenchmarkModule extends AbstractModule {
         Runner.Factory.class));
     install(new FactoryModuleBuilder().build(BenchmarkWorker.Factory.class));
     install(new FactoryModuleBuilder().build(BenchmarkReporter.Factory.class));
-    bind(BenchmarkReporter.HttpURLConnectionFactory.class).to(HttpUrlConnectionProvider.class);
     bind(MailHelper.class).to(MailHelperProdImpl.class);
     bind(String.class).annotatedWith(Names.named("randomStringProvider"))
         .toProvider(RandomStringProvider.class);
@@ -79,16 +78,20 @@ public class BenchmarkModule extends AbstractModule {
         .toInstance(settings.getScriptsDirectory());
     bind(Boolean.class).annotatedWith(Names.named("useReporter"))
         .toInstance(settings.reportResults());
-    bind(String.class).annotatedWith(Names.named("reporterSecret")).toInstance(
-        settings.getReporterSecret());
-    bind(String.class).annotatedWith(Names.named("benchmarkDashboardUrl"))
-        .toInstance(settings.getReporterUrl());
     bind(File.class).annotatedWith(Names.named("persistenceDir"))
         .toInstance(settings.getPersistenceDir());
     bind(File.class).annotatedWith(Names.named("gwtSourceLocation"))
         .toInstance(settings.getGwtSourceLocation());
     bind(MailSettings.class).toInstance(settings.getMailSettings());
+    bind(String.class).annotatedWith(Names.named("spreadSheetId")).toInstance(
+        settings.getSpreadSheetId());
+    bind(String.class).annotatedWith(Names.named("client_json_secret")).toInstance(
+        settings.getOauthSecret());
+  }
 
+  @Provides
+  public SpreadsheetService spreadSheetService() {
+    return new SpreadsheetService("benchmark");
   }
 
   private static class PoolProvider implements Provider<ExecutorService> {
@@ -103,22 +106,6 @@ public class BenchmarkModule extends AbstractModule {
     @Override
     public ExecutorService get() {
       return Executors.newFixedThreadPool(poolSize);
-    }
-  }
-
-  private static class HttpUrlConnectionProvider implements
-      BenchmarkReporter.HttpURLConnectionFactory {
-
-    private String url;
-
-    @Inject
-    public HttpUrlConnectionProvider(@Named("benchmarkDashboardUrl") String url) {
-      this.url = url;
-    }
-
-    @Override
-    public HttpURLConnection create() throws IOException {
-      return (HttpURLConnection) new URL(url).openConnection();
     }
   }
 

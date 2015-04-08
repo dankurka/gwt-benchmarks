@@ -13,6 +13,9 @@
  */
 package com.google.gwt.benchmark.compileserver.server.runners.settings;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
+
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -61,6 +64,9 @@ public class Settings {
 
       settings.mailSettings =
           new MailSettings(mailFrom, mailTo, mailHost, mailUsername, mailPassword);
+      settings.oauthSecret =
+          Files.toString(new File(prop.getProperty("oauth_secret_file")), Charsets.UTF_8);
+      settings.spreadSheetId = prop.getProperty("spreadSheetId");
     } finally {
       IOUtils.closeQuietly(stream);
     }
@@ -92,6 +98,8 @@ public class Settings {
   private File gwtSourceLocation;
   private MailSettings mailSettings;
   private int servletContainerPort;
+  private String oauthSecret;
+  private String spreadSheetId;
 
   public File getBenchmarkRootDirectory() {
     return benchmarkRootDirectory;
@@ -151,6 +159,14 @@ public class Settings {
 
   public int getServletContainerPort() {
     return servletContainerPort;
+  }
+
+  public String getOauthSecret() {
+    return oauthSecret;
+  }
+
+  public String getSpreadSheetId() {
+    return spreadSheetId;
   }
 
   private Settings() {}

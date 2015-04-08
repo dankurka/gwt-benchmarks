@@ -142,7 +142,7 @@ public class BenchmarkManagerTest {
         ArgumentCaptor.forClass(ReportProgressHandler.class);
 
     Mockito.when(reporterFactory.create(resultCaptor.capture(), Mockito.anyString(),
-        Mockito.anyLong(), reportProgressHandlerCaptor.capture())).thenReturn(benchmarkReporter);
+        reportProgressHandlerCaptor.capture())).thenReturn(benchmarkReporter);
 
     Assert.assertFalse(manager.isRunning());
 
@@ -387,7 +387,7 @@ public class BenchmarkManagerTest {
         ArgumentCaptor.forClass(ReportProgressHandler.class);
 
     Mockito.when(reporterFactory.create(resultCaptor.capture(), Mockito.anyString(),
-        Mockito.anyLong(), reportProgressHandlerCaptor.capture())).thenReturn(benchmarkReporter);
+        reportProgressHandlerCaptor.capture())).thenReturn(benchmarkReporter);
 
     Assert.assertFalse(manager.isRunning());
 
@@ -487,7 +487,7 @@ public class BenchmarkManagerTest {
         ArgumentCaptor.forClass(ReportProgressHandler.class);
 
     Mockito.when(reporterFactory.create(resultCaptor.capture(), Mockito.anyString(),
-        Mockito.anyLong(), reportProgressHandlerCaptor.capture())).thenReturn(benchmarkReporter);
+        reportProgressHandlerCaptor.capture())).thenReturn(benchmarkReporter);
 
     Assert.assertFalse(manager.isRunning());
 

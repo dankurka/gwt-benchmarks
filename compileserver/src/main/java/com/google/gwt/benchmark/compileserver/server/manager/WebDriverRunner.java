@@ -77,11 +77,15 @@ public class WebDriverRunner implements Runner {
   public void run() {
     logger.info("Starting webdriver for " + url);
 
-    DesiredCapabilities capabilities = createCapabilities(config);
+
     RemoteWebDriver driver = null;
     try {
+      DesiredCapabilities capabilities = createCapabilities(config);
+      logger.info("Got capabilities for " + config);
       driver = new RemoteWebDriver(hubURL, capabilities);
+      logger.info("Got driver for " + config);
       driver.navigate().to(url);
+      logger.info("Navigated to " + url);
 
       long startMs = System.currentTimeMillis();
 

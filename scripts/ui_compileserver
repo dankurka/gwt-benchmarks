@@ -1,0 +1,4 @@
+#!/bin/bash
+
+ssh gwt@gwt-lab-compileserver -L 11100:localhost:8080 -f sleep 10; \
+google-chrome http://localhost:11100
