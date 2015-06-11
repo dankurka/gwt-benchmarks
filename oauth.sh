@@ -7,8 +7,8 @@ fi
 
 echo "Starting build"
 mvn -q install > /dev/null
-pushd launcher
+pushd cli
 trap '{ echo "Hey, you pressed Ctrl-C.  Time to quit." ; popd; exit 0; }' INT
 echo "Starting oauth tool"
-mvn exec:java -Dexec.mainClass=com.google.gwt.benchmark.launcher.OAuthWriter -Dexec.args="${1} ${2}"
+mvn exec:java -Dexec.mainClass=com.google.j2cl.benchmark.cli.OAuthWriter -Dexec.args="${1} ${2}"
 
