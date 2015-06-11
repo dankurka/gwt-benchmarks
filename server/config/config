@@ -1,0 +1,4 @@
+seleniumHubUrl = http://localhost:4444/wd/hub
+extractDir = /tmp/benchmark_server/workdir/
+threadPoolSize = 5
+servletContainerPort = 8080

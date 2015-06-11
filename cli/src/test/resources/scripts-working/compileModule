@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -e
 
 if [[ -z "${1}" || -z "${2}" || -z "${3}" || -z "${4}" || -z "${5}" ]]; then
@@ -7,7 +6,6 @@ if [[ -z "${1}" || -z "${2}" || -z "${3}" || -z "${4}" || -z "${5}" ]]; then
   echo "usage: compileModule moduleName dev.jar user.jar benchmark_src output_dir"
   exit 1
 fi
-
 
 MODULE_NAME=${1}
 shift
@@ -20,5 +18,5 @@ shift
 OUTPUT_DIR=${1}
 shift
 
-java -Dgwt.persistentunitcache=false -cp ${GWT_DEV_JAR}:${GWT_USER_JAR}:${BENCHMARKS_SRC} \
-    com.google.gwt.dev.Compiler ${COMPILER_EXTRA_ARGS} -war ${OUTPUT_DIR} ${@} ${MODULE_NAME}
+#Echo back all the parameters so that we can verify them in test
+echo "${MODULE_NAME};${GWT_DEV_JAR};${GWT_USER_JAR};${BENCHMARKS_SRC};${OUTPUT_DIR};${@};" > target/test-out
