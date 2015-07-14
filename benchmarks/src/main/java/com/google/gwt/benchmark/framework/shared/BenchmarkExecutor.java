@@ -37,7 +37,7 @@ public class BenchmarkExecutor {
     runBenchmarkForAtLeast(benchmark, 100, 2);
 
     // At least 2 seconds and 2 runs
-    BenchmarkResult benchmarkResult = runBenchmarkForAtLeast(benchmark, 2000, 2);
+    BenchmarkResult benchmarkResult = runBenchmarkForAtLeast(benchmark, 4000, 10);
     benchmark.tearDownOneTime();
 
     return benchmarkResult;

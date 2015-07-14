@@ -23,7 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -80,7 +80,7 @@ public class CliInteractor implements BenchmarkCompiler {
     String outputDir = compilerOutputDir.getAbsolutePath();
     try {
       runCommand(compileScript.getAbsolutePath() + " " + moduleName + " " + devJar.getAbsolutePath()
-          + " " + userJar.getAbsolutePath() + " " + bsl + " " + outputDir + " " + extraArgs, false);
+          + " " + userJar.getAbsolutePath() + " " + bsl + " " + outputDir + " " + extraArgs);
     } catch (CliException e) {
       throw new CliException("failed compile", e);
     }
@@ -146,32 +146,35 @@ public class CliInteractor implements BenchmarkCompiler {
   }
 
   private String runCommand(String command) throws CliException {
-    return runCommand(command, true);
-  }
-
-  private String runCommand(String command, boolean useErrorSteam)
-      throws CliException {
-    InputStream stream = null;
     try {
-      Process process = Runtime.getRuntime().exec(command);
-      int exitValue = process.waitFor();
+      final Process process =
+          new ProcessBuilder(command.split(" ")).redirectErrorStream(true).start();
 
+      final StringWriter output = new StringWriter();
+      Thread thread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+          try {
+            IOUtils.copy(process.getInputStream(), output);
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        }
+      });
+      thread.start();
+
+      int exitValue = process.waitFor();
       if (exitValue != 0) {
-        stream = useErrorSteam ? process.getErrorStream() : process.getInputStream();
-        String error =
-            "Command returned with " + exitValue + " " + IOUtils.toString(stream, "UTF-8");
-        logger.warning(error);
-        throw new CliException(error);
+        thread.join();
+        logger.warning("Command returned with " + exitValue + " " + output);
+        throw new CliException("Command returned with " + exitValue);
       }
 
-      stream = process.getInputStream();
-      return IOUtils.toString(stream, "UTF-8");
+      return output.toString();
 
     } catch (IOException | InterruptedException e) {
       logger.log(Level.WARNING, "Can not run command", e);
       throw new CliException("Can not run command");
-    } finally {
-      IOUtils.closeQuietly(stream);
     }
   }
 }
