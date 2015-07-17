@@ -30,25 +30,12 @@ public class ArrayIntCreateBenchmark extends AbstractBenchmark {
     }
   }
 
-  private Object[] array;
-
   public ArrayIntCreateBenchmark() {
     super("ArrayIntCreateBenchmark");
   }
 
   @Override
   public Object run() {
-    // Note: we are reusing the same array every time, since every run allocates
-    // about 8MB of memory. Not reusing would mean running out of memory very fast
-    // on faster JavaScript VMs
-    for (int i = 0; i < array.length; i++) {
-      array[i] = new int[1000];
-    }
-    return array;
-  }
-
-  @Override
-  public void setupOneTime() {
-    array = new Object[1000];
+    return new int[1000][1000];
   }
 }
