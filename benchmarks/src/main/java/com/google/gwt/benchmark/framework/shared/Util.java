@@ -33,10 +33,11 @@ public class Util {
     }
   }
 
+  /**
+   * Placing results of a benchmark on global window should effectly disable any bad optimizations
+   * since the field could be read by another script that might get loaded later.
+   */
   private static native void disableOptGwt(Object o) /*-{
-    if(!$wnd.__private_disableOpt) {
-      $wnd.__private_disableOpt = function(){};
-    }
-    $wnd.__private_disableOpt(o);
+    $wnd.__private_disableOpt = o;
   }-*/;
 }

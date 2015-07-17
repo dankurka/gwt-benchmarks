@@ -16,7 +16,6 @@
 package com.google.gwt.benchmark.framework.shared;
 
 import com.google.gwt.benchmark.collection.shared.CollectionFactory;
-import com.google.gwt.benchmark.collection.shared.JavaScriptArray;
 import com.google.gwt.benchmark.collection.shared.JavaScriptArrayNumber;
 
 /**
@@ -50,23 +49,20 @@ public class BenchmarkExecutor {
     double minimalEnd = startMs + minimalTime;
 
     int runs = 0;
-    JavaScriptArray<Object> array = CollectionFactory.create();
     JavaScriptArrayNumber times = CollectionFactory.createNumber();
 
     while (runs <= minimalRuns || performance.now() < minimalEnd) {
       benchmark.setup();
       double currentMs = performance.now();
       Object result = benchmark.run();
-      array.push(result);
       times.push(performance.now() - currentMs);
+      Util.disableOpt(result);
       runs++;
       benchmark.tearDown();
     }
 
     double tookMs = performance.now() - startMs;
 
-    // Keep GWT compiler / JavaScript engine from removing code
-    Util.disableOpt(array);
 
     BenchmarkResult benchmarkResult = BenchmarkResultFactory.create();
     benchmarkResult.setName(benchmark.getName());
