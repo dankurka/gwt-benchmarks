@@ -15,6 +15,8 @@
  */
 package com.google.gwt.benchmark.benchmarks.java.util.shared;
 
+import com.google.gwt.benchmark.benchmarks.java.util.shared.helper.Key;
+import com.google.gwt.benchmark.benchmarks.java.util.shared.helper.Value;
 import com.google.gwt.benchmark.collection.shared.CollectionFactory;
 import com.google.gwt.benchmark.collection.shared.JavaScriptArray;
 import com.google.gwt.benchmark.framework.client.AbstractBenchmarkEntryPoint;
@@ -23,28 +25,28 @@ import com.google.gwt.benchmark.framework.shared.AbstractBenchmark;
 import java.util.HashMap;
 
 /**
- * Benchmark for String insertion into {@link HashMap}.
+ * Benchmark for object insertion (not String) into {@link HashMap}.
  */
-public class HashMapInsertStringKeysBenchmark extends AbstractBenchmark {
+public class HashMapObjectPutBenchmark extends AbstractBenchmark {
 
   public static class EntryPoint extends AbstractBenchmarkEntryPoint {
     @Override
     protected AbstractBenchmark getBenchmark() {
-      return new HashMapInsertStringKeysBenchmark();
+      return new HashMapObjectPutBenchmark();
     }
   }
 
-  private JavaScriptArray<String> keys;
+  private JavaScriptArray<Key> keys;
   private int length;
-  private JavaScriptArray<String> values;
+  private JavaScriptArray<Value> values;
 
-  public HashMapInsertStringKeysBenchmark() {
-    super(HashMapInsertStringKeysBenchmark.class.getName());
+  public HashMapObjectPutBenchmark() {
+    super("HashMapObjectPutBenchmark");
   }
 
   @Override
   public Object run() {
-    HashMap<String, String> map = new HashMap<String, String>();
+    HashMap<Key, Value> map = new HashMap<Key,Value>();
 
     for (int i = 0; i < keys.length(); i++) {
       map.put(keys.get(i), values.get(i));
@@ -64,8 +66,8 @@ public class HashMapInsertStringKeysBenchmark extends AbstractBenchmark {
     values = CollectionFactory.create();
 
     for (int i = 0; i < length; i++) {
-      keys.push("thisissomekey" + i);
-      values.push("thisissomevalue" + i);
+      keys.push(new Key("thisissomekey" + i));
+      values.push(new Value("thisissomevalue" + i));
     }
   }
 }

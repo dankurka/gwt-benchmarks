@@ -23,51 +23,53 @@ import com.google.gwt.benchmark.framework.client.AbstractBenchmarkEntryPoint;
 import com.google.gwt.benchmark.framework.shared.AbstractBenchmark;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 /**
- * Benchmark for object insertion (not String) into {@link HashMap}.
+ * Benchmark for iteration operation of a {@link HashMap}.
  */
-public class HashMapInsertObjectKeysBenchmark extends AbstractBenchmark {
+public class HashMapObjectIterationBenchmark extends AbstractBenchmark {
 
   public static class EntryPoint extends AbstractBenchmarkEntryPoint {
     @Override
     protected AbstractBenchmark getBenchmark() {
-      return new HashMapInsertObjectKeysBenchmark();
+      return new HashMapObjectIterationBenchmark();
     }
   }
 
-  private JavaScriptArray<Key> keys;
   private int length;
-  private JavaScriptArray<Value> values;
 
-  public HashMapInsertObjectKeysBenchmark() {
-    super(HashMapInsertObjectKeysBenchmark.class.getName());
+  private HashMap<Object, Object> map;
+
+  public HashMapObjectIterationBenchmark() {
+    super("HashMapObjectIterationBenchmark");
   }
 
   @Override
   public Object run() {
-    HashMap<Key, Value> map = new HashMap<Key,Value>();
+    JavaScriptArray<Object> array = CollectionFactory.create(length * 2);
 
-    for (int i = 0; i < keys.length(); i++) {
-      map.put(keys.get(i), values.get(i));
+    int count = 0;
+    for (Entry<Object, Object> entry : map.entrySet()) {
+      array.set(count++, entry.getKey());
+      array.set(count++, entry.getValue());
     }
 
-    if(map.size() != length) {
+    if (array.length() != length * 2) {
       throw new RuntimeException();
     }
 
-    return map;
+    return array;
   }
 
   @Override
   public void setupOneTime() {
     length = 1000;
-    keys = CollectionFactory.create();
-    values = CollectionFactory.create();
+
+    map = new HashMap<Object, Object>();
 
     for (int i = 0; i < length; i++) {
-      keys.push(new Key("thisissomekey" + i));
-      values.push(new Value("thisissomevalue" + i));
+      map.put(new Key("thisissomekey" + i), new Value("thisissomevalue" + i));
     }
   }
 }

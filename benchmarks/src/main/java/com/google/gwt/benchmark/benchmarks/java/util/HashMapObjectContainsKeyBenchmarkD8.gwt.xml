@@ -13,6 +13,6 @@
 <!-- limitations under the License.                                         -->
 
 <module>
-  <inherits name="com.google.gwt.benchmark.benchmarks.java.util.HashMapInsertStringKeysBenchmark"/>
+  <inherits name="com.google.gwt.benchmark.benchmarks.java.util.HashMapObjectContainsKeyBenchmark"/>
   <inherits name="com.google.gwt.benchmark.d8.D8"/>
 </module>

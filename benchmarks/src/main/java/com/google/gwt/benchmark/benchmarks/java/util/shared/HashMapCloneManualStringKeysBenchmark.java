@@ -39,7 +39,7 @@ public class HashMapCloneManualStringKeysBenchmark extends AbstractBenchmark {
   private HashMap<String, String> map;
 
   public HashMapCloneManualStringKeysBenchmark() {
-    super("ManualCloneStringHashMap");
+    super("HashMapCloneManualStringKeysBenchmark");
   }
 
   @Override

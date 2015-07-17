@@ -40,7 +40,7 @@ public class HashMapStringIterationBenchmark extends AbstractBenchmark {
   private HashMap<String, String> map;
 
   public HashMapStringIterationBenchmark() {
-    super("StringHashMapIterationBenchmark");
+    super("HashMapStringIterationBenchmark");
   }
 
   @Override

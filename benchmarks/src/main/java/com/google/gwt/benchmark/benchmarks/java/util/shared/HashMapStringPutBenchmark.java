@@ -15,58 +15,57 @@
  */
 package com.google.gwt.benchmark.benchmarks.java.util.shared;
 
+import com.google.gwt.benchmark.collection.shared.CollectionFactory;
+import com.google.gwt.benchmark.collection.shared.JavaScriptArray;
 import com.google.gwt.benchmark.framework.client.AbstractBenchmarkEntryPoint;
 import com.google.gwt.benchmark.framework.shared.AbstractBenchmark;
 
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 
 /**
- * Benchmark for copying operation of a {@link HashMap}.
+ * Benchmark for String insertion into {@link HashMap}.
  */
-public class HashMapCloneManualObjectKeysBenchmark extends AbstractBenchmark {
+public class HashMapStringPutBenchmark extends AbstractBenchmark {
 
   public static class EntryPoint extends AbstractBenchmarkEntryPoint {
     @Override
     protected AbstractBenchmark getBenchmark() {
-      return new HashMapCloneManualObjectKeysBenchmark();
+      return new HashMapStringPutBenchmark();
     }
   }
 
+  private JavaScriptArray<String> keys;
   private int length;
+  private JavaScriptArray<String> values;
 
-  private HashMap<Object, Object> map;
-
-  public HashMapCloneManualObjectKeysBenchmark() {
-    super("ManualCloneObjectHashMap");
+  public HashMapStringPutBenchmark() {
+    super("HashMapObjectPutBenchmark");
   }
 
   @Override
   public Object run() {
-    Map<Object, Object> clone = new HashMap<Object, Object>();
-    for( Entry<Object, Object> entries : map.entrySet())
-    {
-      clone.put(entries.getKey(), entries.getValue());
+    HashMap<String, String> map = new HashMap<String, String>();
+
+    for (int i = 0; i < keys.length(); i++) {
+      map.put(keys.get(i), values.get(i));
     }
 
-    if(clone.size() != length) {
+    if(map.size() != length) {
       throw new RuntimeException();
     }
 
-    return clone;
+    return map;
   }
 
   @Override
   public void setupOneTime() {
     length = 1000;
-
-    map = new HashMap<Object, Object>();
+    keys = CollectionFactory.create();
+    values = CollectionFactory.create();
 
     for (int i = 0; i < length; i++) {
-      Integer key = i;
-      Integer value =  i + 1;
-      map.put(key, value);
+      keys.push("thisissomekey" + i);
+      values.push("thisissomevalue" + i);
     }
   }
 }
