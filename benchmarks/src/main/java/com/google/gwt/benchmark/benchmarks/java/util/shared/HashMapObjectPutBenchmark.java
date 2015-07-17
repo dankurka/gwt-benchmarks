@@ -66,8 +66,8 @@ public class HashMapObjectPutBenchmark extends AbstractBenchmark {
     values = CollectionFactory.create();
 
     for (int i = 0; i < length; i++) {
-      keys.push(new Key("thisissomekey" + i));
-      values.push(new Value("thisissomevalue" + i));
+      keys.push(new Key());
+      values.push(new Value());
     }
   }
 }

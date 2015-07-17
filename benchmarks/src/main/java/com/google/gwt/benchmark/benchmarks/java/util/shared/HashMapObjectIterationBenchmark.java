@@ -69,7 +69,7 @@ public class HashMapObjectIterationBenchmark extends AbstractBenchmark {
     map = new HashMap<Object, Object>();
 
     for (int i = 0; i < length; i++) {
-      map.put(new Key("thisissomekey" + i), new Value("thisissomevalue" + i));
+      map.put(new Key(), new Value());
     }
   }
 }

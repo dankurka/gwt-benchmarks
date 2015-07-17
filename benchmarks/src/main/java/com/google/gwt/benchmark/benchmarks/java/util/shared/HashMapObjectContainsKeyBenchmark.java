@@ -80,8 +80,8 @@ public class HashMapObjectContainsKeyBenchmark extends AbstractBenchmark {
     map = new HashMap<Object, Object>();
 
     for (int i = 0; i < length; i++) {
-      Key key = new Key("thisissomekey" + i);
-      Value value = new Value("thisissomevalue" + i);
+      Key key = new Key();
+      Value value = new Value();
       keysInMap.push(key);
       keysNotInMap.push(value);
       map.put(key, value);
