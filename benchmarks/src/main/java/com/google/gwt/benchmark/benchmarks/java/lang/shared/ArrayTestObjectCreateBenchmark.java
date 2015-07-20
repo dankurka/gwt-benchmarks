@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Google Inc.
+ * Copyright 2015 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,21 +21,23 @@ import com.google.gwt.benchmark.framework.shared.AbstractBenchmark;
 /**
  * Benchmark for object array creation performance.
  */
-public class ArrayObjectCreateBenchmark extends AbstractBenchmark {
+public class ArrayTestObjectCreateBenchmark extends AbstractBenchmark {
 
   public static class EntryPoint extends AbstractBenchmarkEntryPoint {
     @Override
     protected AbstractBenchmark getBenchmark() {
-      return new ArrayObjectCreateBenchmark();
+      return new ArrayTestObjectCreateBenchmark();
     }
   }
 
-  public ArrayObjectCreateBenchmark() {
-    super("ArrayObjectCreateBenchmark");
+  private static class TestObject {}
+
+  public ArrayTestObjectCreateBenchmark() {
+    super("ArrayTestObjectCreateBenchmark");
   }
 
   @Override
   public Object run() {
-    return new Object[1000][1000];
+    return new TestObject[1000][1000];
   }
 }

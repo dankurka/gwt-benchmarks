@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Google Inc.
+ * Copyright 2015 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,23 +19,47 @@ import com.google.gwt.benchmark.framework.client.AbstractBenchmarkEntryPoint;
 import com.google.gwt.benchmark.framework.shared.AbstractBenchmark;
 
 /**
- * Benchmark for object array creation performance.
+ * Benchmark array iteration performance.
  */
-public class ArrayObjectCreateBenchmark extends AbstractBenchmark {
+public class ArrayObjectIterationBenchmark extends AbstractBenchmark {
 
   public static class EntryPoint extends AbstractBenchmarkEntryPoint {
     @Override
     protected AbstractBenchmark getBenchmark() {
-      return new ArrayObjectCreateBenchmark();
+      return new ArrayObjectIterationBenchmark();
     }
   }
 
-  public ArrayObjectCreateBenchmark() {
-    super("ArrayObjectCreateBenchmark");
+  private Object[] array;
+
+  public ArrayObjectIterationBenchmark() {
+    super("ArrayObjectIterationBenchmark");
   }
 
   @Override
   public Object run() {
-    return new Object[1000][1000];
+
+    int sum = 0;
+
+    for (Object object : array) {
+      if (object != null) {
+        sum++;
+      }
+    }
+
+    // compare value - disables opts and finds JIT bugs
+    if (sum != 10000) {
+      throw new RuntimeException();
+    }
+
+    return Integer.valueOf(sum);
+  }
+
+  @Override
+  public void setupOneTime() {
+    array = new Object[10000];
+    for (int i = 0; i < array.length; i++) {
+      array[i] = ":" + i;
+    }
   }
 }
