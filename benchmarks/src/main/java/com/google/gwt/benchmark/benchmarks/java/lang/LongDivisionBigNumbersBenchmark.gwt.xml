@@ -1,5 +1,5 @@
 <!--                                                                        -->
-<!-- Copyright 2014 Google Inc.                                             -->
+<!-- Copyright 2015 Google Inc.                                             -->
 <!-- Licensed under the Apache License, Version 2.0 (the "License"); you    -->
 <!-- may not use this file except in compliance with the License. You may   -->
 <!-- may obtain a copy of the License at                                    -->
@@ -14,6 +14,6 @@
 
 <module>
   <inherits name="com.google.gwt.benchmark.benchmarks.java.lang.Lang"/>
-  <entry-point class="com.google.gwt.benchmark.benchmarks.java.lang.shared.LongMultiplyBenchmark.EntryPoint"/>
-  <source path="shared" includes="LongMultiplyBenchmark.java" />
+  <entry-point class="com.google.gwt.benchmark.benchmarks.java.lang.shared.LongDivisionBigNumbersBenchmark.EntryPoint"/>
+  <source path="shared" includes="LongDivisionBigNumbersBenchmark.java" />
 </module>

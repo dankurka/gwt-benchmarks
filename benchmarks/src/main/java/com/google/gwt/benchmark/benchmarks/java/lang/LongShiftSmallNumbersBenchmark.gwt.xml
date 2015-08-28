@@ -1,5 +1,5 @@
 <!--                                                                        -->
-<!-- Copyright 2014 Google Inc.                                             -->
+<!-- Copyright 2015 Google Inc.                                             -->
 <!-- Licensed under the Apache License, Version 2.0 (the "License"); you    -->
 <!-- may not use this file except in compliance with the License. You may   -->
 <!-- may obtain a copy of the License at                                    -->
@@ -13,6 +13,7 @@
 <!-- limitations under the License.                                         -->
 
 <module>
-  <inherits name="com.google.gwt.benchmark.benchmarks.java.lang.LongAddBenchmark"/>
-  <inherits name="com.google.gwt.benchmark.d8.D8"/>
+  <inherits name="com.google.gwt.benchmark.benchmarks.java.lang.Lang"/>
+  <entry-point class="com.google.gwt.benchmark.benchmarks.java.lang.shared.LongShiftSmallNumbersBenchmark.EntryPoint"/>
+  <source path="shared" includes="LongShiftSmallNumbersBenchmark.java" />
 </module>
