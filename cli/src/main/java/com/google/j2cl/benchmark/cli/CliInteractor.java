@@ -164,10 +164,10 @@ public class CliInteractor implements BenchmarkCompiler {
       thread.start();
 
       int exitValue = process.waitFor();
+      thread.join();
       if (exitValue != 0) {
-        thread.join();
         logger.warning("Command returned with " + exitValue + " " + output);
-        throw new CliException("Command returned with " + exitValue);
+        throw new CliException("Command returned with " + exitValue + " " + output);
       }
 
       return output.toString();

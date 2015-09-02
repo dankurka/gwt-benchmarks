@@ -17,8 +17,12 @@ import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.google.gson.GsonBuilder;
 import com.google.j2cl.benchmark.common.runner.Job;
+import com.google.j2cl.benchmark.common.runner.Job.Status;
 import com.google.j2cl.benchmark.common.runner.JobId;
+import com.google.j2cl.benchmark.common.runner.RunnerConfig;
+import com.google.j2cl.benchmark.common.runner.RunnerConfigJson;
 import com.google.j2cl.benchmark.common.runner.RunnerConfigs;
 
 import static org.junit.Assert.fail;
@@ -29,6 +33,7 @@ import static org.mockito.Mockito.when;
 import org.apache.commons.fileupload.FileItem;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -101,16 +106,23 @@ public class BenchmarkUploadServletTest {
     HttpServletResponse response = mock(HttpServletResponse.class);
     PrintWriter writer = mock(PrintWriter.class);
     when(response.getWriter()).thenReturn(writer);
+
     servlet.doGet(request, response);
-    verify(writer).write("{\"job\":{\"jobId\":{\"id\":\"jobId1\"},\"status\":\"CREATED\","
-        + "\"counter\":0,\"failedCounter\":0,\"expectedResults\":4,\"jobResultsByRunnerId\":"
-        + "{\"windows ie IE11\":{\"succeded\":false,\"result\":0.0,\"ran\":false,\"runnerConfig\":"
-        + "\"windows ie IE11\"},\"windows ie IE10\":{\"succeded\":false,\"result\":0.0,\"ran\":"
-        + "false,\"runnerConfig\":\"windows ie IE10\"},\"linux chrome\":{\"succeded\":false,"
-        + "\"result\":0.0,\"ran\":false,\"runnerConfig\":\"linux chrome\"},\"linux firefox\""
-        + ":{\"succeded\":false,\"result\":0.0,\"ran\":false,\"runnerConfig\":\"linux firefox\"}}"
-        + ",\"runnerConfigs\":[\"linux firefox\",\"linux chrome\",\"windows ie IE10\""
-        + ",\"windows ie IE11\"],\"creationTimeInMsEpoch\":1}}");
+
+    ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
+    verify(writer).write(stringCaptor.capture());
+
+
+    String json = stringCaptor.getValue();
+    BenchmarkUploadServlet.JobResponse jobResponse = new GsonBuilder()
+        .registerTypeAdapter(RunnerConfig.class, new RunnerConfigJson())
+        .create()
+        .fromJson(json, BenchmarkUploadServlet.JobResponse.class);
+    assertThat(jobResponse.job).isNotNull();
+
+    assertThat(jobResponse.job.getJobId().getId()).isEqualTo("jobId1");
+    assertThat(jobResponse.job.getStatus()).isEqualTo(Status.CREATED);
+    assertThat(jobResponse.job.getJobResults()).hasSize(4);
   }
 
   @Test

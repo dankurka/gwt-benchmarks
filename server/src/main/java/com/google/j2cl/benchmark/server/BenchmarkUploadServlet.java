@@ -44,12 +44,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class BenchmarkUploadServlet extends HttpServlet {
 
-  private static class JobIdResponse {
+  static class JobIdResponse {
     @SuppressWarnings("unused")
     JobId jobId;
   }
 
-  private static class JobResponse {
+  static class JobResponse {
     @SuppressWarnings("unused")
     Job job;
   }

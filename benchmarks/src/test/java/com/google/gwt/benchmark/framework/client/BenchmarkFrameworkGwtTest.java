@@ -34,8 +34,8 @@ public class BenchmarkFrameworkGwtTest extends GWTTestCase {
     MockBenchmark benchmark = new MockBenchmark();
     BenchmarkExecutor executor = new BenchmarkExecutor();
     BenchmarkResult benchmarkResult = executor.executeWithFixedTime(benchmark);
-    assertEquals(2000, benchmarkResult.getTotalTimePassedMs(), 100);
-    assertEquals(40, benchmarkResult.getNumberOfRuns(), 2);
+    assertEquals(4000, benchmarkResult.getTotalTimePassedMs(), 100);
+    assertEquals(80, benchmarkResult.getNumberOfRuns(), 2);
     assertTrue(benchmark.isTearDownOneTimeCalled());
   }
 }

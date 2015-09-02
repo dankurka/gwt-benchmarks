@@ -32,8 +32,8 @@ public class BenchmarkFrameworkTest {
     MockBenchmark benchmark = new MockBenchmark();
     BenchmarkExecutor executor = new BenchmarkExecutor();
     BenchmarkResult benchmarkResult = executor.executeWithFixedTime(benchmark);
-    Assert.assertEquals(2000, benchmarkResult.getTotalTimePassedMs(), 100);
-    Assert.assertEquals(40, benchmarkResult.getNumberOfRuns(), 2);
+    Assert.assertEquals(4000, benchmarkResult.getTotalTimePassedMs(), 100);
+    Assert.assertEquals(80, benchmarkResult.getNumberOfRuns(), 2);
     Assert.assertTrue(benchmark.isTearDownOneTimeCalled());
   }
 }
