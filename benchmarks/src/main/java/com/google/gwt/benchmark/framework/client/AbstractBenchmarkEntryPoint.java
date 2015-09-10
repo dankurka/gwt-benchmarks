@@ -23,6 +23,14 @@ import com.google.gwt.benchmark.framework.shared.PerformanceFactory;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 /**
  * Base class for all Benchmark entry points.
  */
@@ -30,6 +38,10 @@ public abstract class AbstractBenchmarkEntryPoint implements EntryPoint {
 
   @Override
   public void onModuleLoad() {
+    // Make sure we depend on common collection classes so our benchmarks are more representative of
+    // real world apps.
+    dependOnAllCollections();
+
     try {
       maybePatchPerformanceNow();
       BenchmarkExecutor executor = new BenchmarkExecutor();
@@ -101,4 +113,97 @@ public abstract class AbstractBenchmarkEntryPoint implements EntryPoint {
     div.textContent = s;
     $doc.body.appendChild(div);
   }-*/;
+
+  private static void dependOnAllCollections() {
+    utilizeMap(new HashMap<String, String>());
+    utilizeMap(new LinkedHashMap<String, String>());
+    utilizeList(new ArrayList<String>());
+    utilizeList(new LinkedList<String>());
+    utilizeList(new ArrayList<String>() {
+      int size = 0;
+
+      @Override
+      public boolean add(String item) {
+        size++;
+        return super.add(item);
+      }
+
+      @Override
+      public String get(int index) {
+        return super.get(index);
+      }
+
+      @Override
+      public int size() {
+        return size;
+      }
+    });
+    utilizeList(new LinkedList<String>() {
+      int size = 0;
+
+      @Override
+      public boolean add(String item) {
+        size++;
+        return super.add(item);
+      }
+
+      @Override
+      public String get(int index) {
+        return super.get(index);
+      }
+
+      @Override
+      public int size() {
+        return size;
+      }
+    });
+  }
+
+  private static void utilizeMap(Map<String, String> map) {
+    if (addGet(map) && iterate(map) && remove(map)) {
+      return;
+    }
+    throw new AssertionError();
+  }
+
+  private static boolean addGet(Map<String, String> map) {
+    map.put("input", "output");
+    return "output".equals(map.get("input")) && map.size() == 1;
+  }
+
+  private static boolean iterate(Map<String, String> map) {
+    String result = "";
+    for (Entry<String, String> entry : map.entrySet()) {
+      result += entry.getKey() + entry.getValue();
+    }
+    return result.length() > 0;
+  }
+
+  private static boolean remove(Map<String, String> map) {
+    return "output".equals(map.remove("input"));
+  }
+
+  private static void utilizeList(List<String> list) {
+    if (addGet(list) && iterate(list) && remove(list)) {
+      return;
+    }
+    throw new AssertionError();
+  }
+
+  private static boolean addGet(List<String> list) {
+    list.add("input");
+    return "input".equals(list.get(0)) && list.size() == 1;
+  }
+
+  private static boolean remove(List<String> list) {
+    return "input".equals(list.remove(0));
+  }
+
+  private static boolean iterate(List<String> list) {
+    String result = "";
+    for (String entry : list) {
+      result += entry;
+    }
+    return result.length() > 0;
+  }
 }
