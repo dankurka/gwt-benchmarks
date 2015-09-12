@@ -13,7 +13,7 @@ cd ${SOURCE_LOCATION}
 git fetch origin master
 git checkout origin/master
 
-NEXT_COMMIT=$(git log --ancestry-path --format=%H ${PARENT_COMMIT}..origin/master | tail -1)
+NEXT_COMMIT=$(git log --reverse --format=%H ${PARENT_COMMIT}..origin/master | head -1)
 
 if [[ -z "${NEXT_COMMIT}" ]]; then
   exit 0

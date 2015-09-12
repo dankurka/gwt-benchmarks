@@ -103,7 +103,7 @@ public class ManagerTest {
     };
 
     manager = new Manager(collector, benchmarkWorkerFactory, poolProvider, reporterFactory, true,
-        commitReader, errorReporter, filterPredicate, true, false, devJar, userJar, "") {
+        commitReader, errorReporter, filterPredicate, true, false, devJar, userJar, "", false) {
       @Override
       void sleep(long timeInMs) throws InterruptedException {
         // we use this to end the test!
@@ -136,67 +136,42 @@ public class ManagerTest {
     Future<WorkResult> workResultFuture2 = cast(mock(Future.class));
     Future<WorkResult> workResultFuture3 = cast(mock(Future.class));
     Future<WorkResult> workResultFuture4 = cast(mock(Future.class));
-    Future<WorkResult> workResultFuture5 = cast(mock(Future.class));
-    Future<WorkResult> workResultFuture6 = cast(mock(Future.class));
 
     when(workResultFuture1.isDone()).thenReturn(false, true);
     when(workResultFuture2.isDone()).thenReturn(false, true);
     when(workResultFuture3.isDone()).thenReturn(false, true);
     when(workResultFuture4.isDone()).thenReturn(false, true);
-    when(workResultFuture5.isDone()).thenReturn(false, true);
-    when(workResultFuture6.isDone()).thenReturn(false, true);
 
     Job job1 = new Job(new JobId("jobId1"), RunnerConfigs.getAllRunners(), 1);
     job1.addResult(RunnerConfigs.CHROME_LINUX, 1);
     job1.addResult(RunnerConfigs.FIREFOX_LINUX, 2);
-    job1.addResult(RunnerConfigs.IE10_WIN, 3);
-    job1.addResult(RunnerConfigs.IE11_WIN, 4);
+    job1.addResult(RunnerConfigs.IE11_WIN, 3);
     WorkResult workResult1 = new WorkResult(job1);
     when(workResultFuture1.get()).thenReturn(workResult1);
 
     Job job2 = new Job(new JobId("jobId2"), RunnerConfigs.getAllRunners(), 2);
-    job2.addResult(RunnerConfigs.CHROME_LINUX, 5);
-    job2.addResult(RunnerConfigs.FIREFOX_LINUX,6);
-    job2.addResult(RunnerConfigs.IE10_WIN, 7);
-    job2.addResult(RunnerConfigs.IE11_WIN, 8);
+    job2.addResult(RunnerConfigs.CHROME_LINUX, 4);
+    job2.addResult(RunnerConfigs.FIREFOX_LINUX,5);
+    job2.addResult(RunnerConfigs.IE11_WIN, 6);
     WorkResult workResult2 = new WorkResult(job2);
     when(workResultFuture2.get()).thenReturn(workResult2);
 
     Job job3 = new Job(new JobId("jobId3"), RunnerConfigs.getAllRunners(), 3);
-    job3.addResult(RunnerConfigs.CHROME_LINUX, 9);
-    job3.addResult(RunnerConfigs.FIREFOX_LINUX, 10);
-    job3.addResult(RunnerConfigs.IE10_WIN, 11);
-    job3.addResult(RunnerConfigs.IE11_WIN, 12);
+    job3.addResult(RunnerConfigs.CHROME_LINUX, 7);
+    job3.addResult(RunnerConfigs.FIREFOX_LINUX, 8);
+    job3.addResult(RunnerConfigs.IE11_WIN, 9);
     WorkResult workResult3 = new WorkResult(job3);
     when(workResultFuture3.get()).thenReturn(workResult3);
 
     Job job4 = new Job(new JobId("jobId4"), RunnerConfigs.getAllRunners(), 4);
-    job4.addResult(RunnerConfigs.CHROME_LINUX, 13);
-    job4.addResult(RunnerConfigs.FIREFOX_LINUX, 14);
-    job4.addResult(RunnerConfigs.IE10_WIN, 15);
-    job4.addResult(RunnerConfigs.IE11_WIN, 16);
+    job4.addResult(RunnerConfigs.CHROME_LINUX, 10);
+    job4.addResult(RunnerConfigs.FIREFOX_LINUX, 11);
+    job4.addResult(RunnerConfigs.IE11_WIN, 12);
     WorkResult workResult4 = new WorkResult(job4);
     when(workResultFuture4.get()).thenReturn(workResult4);
 
-    Job job5 = new Job(new JobId("jobId5"), RunnerConfigs.getAllRunners(), 5);
-    job5.addResult(RunnerConfigs.CHROME_LINUX, 17);
-    job5.addResult(RunnerConfigs.FIREFOX_LINUX, 18);
-    job5.addResult(RunnerConfigs.IE10_WIN, 19);
-    job5.addResult(RunnerConfigs.IE11_WIN, 20);
-    WorkResult workResult5 = new WorkResult(job5);
-    when(workResultFuture5.get()).thenReturn(workResult5);
-
-    Job job6 = new Job(new JobId("jobId6"), RunnerConfigs.getAllRunners(), 6);
-    job6.addResult(RunnerConfigs.CHROME_LINUX, 21);
-    job6.addResult(RunnerConfigs.FIREFOX_LINUX, 22);
-    job6.addResult(RunnerConfigs.IE10_WIN, 23);
-    job6.addResult(RunnerConfigs.IE11_WIN, 24);
-    WorkResult workResult6 = new WorkResult(job6);
-    when(workResultFuture6.get()).thenReturn(workResult6);
-
     when(threadPoolExecutor.submit(benchmarkWorker))
-        .thenReturn(workResultFuture1, workResultFuture2, workResultFuture3, workResultFuture4,
-            workResultFuture5, workResultFuture6);
+        .thenReturn(workResultFuture1, workResultFuture2, workResultFuture3, workResultFuture4);
 
     when(benchmarkReporter.report()).thenReturn(true);
 
@@ -213,58 +188,40 @@ public class ManagerTest {
     verify(commitReader).maybeCheckoutNextCommit("commit1");
     verify(poolProvider).get();
     verify(collector).get();
-    verify(threadPoolExecutor, times(6)).submit(benchmarkWorker);
+    verify(threadPoolExecutor, times(4)).submit(benchmarkWorker);
 
     List<BenchmarkWorkerConfig> workerConfigs = workerConfigCapture.getAllValues();
-    assertThat(workerConfigs.size()).isEqualTo(6);
+    assertThat(workerConfigs.size()).isEqualTo(4);
 
     assertBenchmarkWorkerConfig(workerConfigs.get(0), "module1");
     assertBenchmarkWorkerConfig(workerConfigs.get(1), "module1");
-    assertBenchmarkWorkerConfig(workerConfigs.get(2), "module1");
 
+    assertBenchmarkWorkerConfig(workerConfigs.get(2), "module2");
     assertBenchmarkWorkerConfig(workerConfigs.get(3), "module2");
-    assertBenchmarkWorkerConfig(workerConfigs.get(4), "module2");
-    assertBenchmarkWorkerConfig(workerConfigs.get(5), "module2");
 
     verify(benchmarkReporter).report();
 
     List<BenchmarkRun> capturedBenchmarkResults = resultCaptor.getValue();
 
-    assertThat(capturedBenchmarkResults.size()).isEqualTo(6);
+    assertThat(capturedBenchmarkResults.size()).isEqualTo(4);
 
     assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(0), RunnerConfigs.CHROME_LINUX, 1.0);
     assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(0), RunnerConfigs.FIREFOX_LINUX, 2.0);
-    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(0), RunnerConfigs.IE10_WIN, 3.0);
-    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(0), RunnerConfigs.IE11_WIN, 4.0);
+    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(0), RunnerConfigs.IE11_WIN, 3.0);
 
-    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(1), RunnerConfigs.CHROME_LINUX, 5.0);
-    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(1), RunnerConfigs.FIREFOX_LINUX, 6.0);
-    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(1), RunnerConfigs.IE10_WIN, 7.0);
-    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(1), RunnerConfigs.IE11_WIN, 8.0);
+    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(1), RunnerConfigs.CHROME_LINUX, 4.0);
+    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(1), RunnerConfigs.FIREFOX_LINUX, 5.0);
+    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(1), RunnerConfigs.IE11_WIN, 6.0);
 
-    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(2), RunnerConfigs.CHROME_LINUX, 9.0);
+    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(2), RunnerConfigs.CHROME_LINUX, 7.0);
     assertSuccessfulBenchmarkRun(
-        capturedBenchmarkResults.get(2), RunnerConfigs.FIREFOX_LINUX, 10.0);
-    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(2), RunnerConfigs.IE10_WIN, 11.0);
-    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(2), RunnerConfigs.IE11_WIN, 12.0);
+        capturedBenchmarkResults.get(2), RunnerConfigs.FIREFOX_LINUX, 8.0);
+    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(2), RunnerConfigs.IE11_WIN, 9.0);
 
-    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(3), RunnerConfigs.CHROME_LINUX, 13.0);
+    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(3), RunnerConfigs.CHROME_LINUX, 10.0);
     assertSuccessfulBenchmarkRun(
-        capturedBenchmarkResults.get(3), RunnerConfigs.FIREFOX_LINUX, 14.0);
-    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(3), RunnerConfigs.IE10_WIN, 15.0);
-    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(3), RunnerConfigs.IE11_WIN, 16.0);
-
-    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(4), RunnerConfigs.CHROME_LINUX, 17.0);
-    assertSuccessfulBenchmarkRun(
-        capturedBenchmarkResults.get(4), RunnerConfigs.FIREFOX_LINUX, 18.0);
-    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(4), RunnerConfigs.IE10_WIN, 19.0);
-    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(4), RunnerConfigs.IE11_WIN, 20.0);
-
-    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(5), RunnerConfigs.CHROME_LINUX, 21.0);
-    assertSuccessfulBenchmarkRun(
-        capturedBenchmarkResults.get(5), RunnerConfigs.FIREFOX_LINUX, 22.0);
-    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(5), RunnerConfigs.IE10_WIN, 23.0);
-    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(5), RunnerConfigs.IE11_WIN, 24.0);
+        capturedBenchmarkResults.get(3), RunnerConfigs.FIREFOX_LINUX, 11.0);
+    assertSuccessfulBenchmarkRun(capturedBenchmarkResults.get(3), RunnerConfigs.IE11_WIN, 12.0);
 
     verifyZeroInteractions(errorReporter);
   }
@@ -296,7 +253,7 @@ public class ManagerTest {
     };
 
     manager = new Manager(collector, benchmarkWorkerFactory, poolProvider, reporterFactory, true,
-        commitReader, errorReporter, filterPredicate, true, false, devJar, userJar, "") {
+        commitReader, errorReporter, filterPredicate, true, false, devJar, userJar, "", false) {
       @Override
       void sleep(long timeInMs) throws InterruptedException {
         // we use this to end the test!
@@ -334,15 +291,13 @@ public class ManagerTest {
     Job job1 = new Job(new JobId("jobId1"), RunnerConfigs.getAllRunners(), 1);
     job1.addResult(RunnerConfigs.CHROME_LINUX, 1);
     job1.addResult(RunnerConfigs.FIREFOX_LINUX, 2);
-    job1.addResult(RunnerConfigs.IE10_WIN, 3);
-    job1.addResult(RunnerConfigs.IE11_WIN, 4);
+    job1.addResult(RunnerConfigs.IE11_WIN, 3);
     WorkResult workResult1 = new WorkResult(job1);
     when(workResultFuture1.get()).thenReturn(workResult1);
     Job job2 = new Job(new JobId("jobId2"), RunnerConfigs.getAllRunners(), 2);
     job2.setRunFailed(RunnerConfigs.CHROME_LINUX, "just testing");
-    job2.addResult(RunnerConfigs.FIREFOX_LINUX,6);
-    job2.addResult(RunnerConfigs.IE10_WIN, 7);
-    job2.addResult(RunnerConfigs.IE11_WIN, 8);
+    job2.addResult(RunnerConfigs.FIREFOX_LINUX,5);
+    job2.addResult(RunnerConfigs.IE11_WIN, 6);
     WorkResult workResult2 = new WorkResult(job2);
     when(workResultFuture2.get()).thenReturn(workResult2);
 
@@ -363,18 +318,16 @@ public class ManagerTest {
     verify(commitReader).maybeCheckoutNextCommit("commit1");
     verify(poolProvider).get();
     verify(collector).get();
-    verify(threadPoolExecutor, times(6)).submit(benchmarkWorker);
+    verify(threadPoolExecutor, times(4)).submit(benchmarkWorker);
 
     List<BenchmarkWorkerConfig> workerConfigs = workerConfigCapture.getAllValues();
-    assertThat(workerConfigs.size()).isEqualTo(6);
+    assertThat(workerConfigs.size()).isEqualTo(4);
 
     assertBenchmarkWorkerConfig(workerConfigs.get(0), "module1");
     assertBenchmarkWorkerConfig(workerConfigs.get(1), "module1");
-    assertBenchmarkWorkerConfig(workerConfigs.get(2), "module1");
 
+    assertBenchmarkWorkerConfig(workerConfigs.get(2), "module2");
     assertBenchmarkWorkerConfig(workerConfigs.get(3), "module2");
-    assertBenchmarkWorkerConfig(workerConfigs.get(4), "module2");
-    assertBenchmarkWorkerConfig(workerConfigs.get(5), "module2");
 
     verifyZeroInteractions(benchmarkReporter);
 
@@ -388,10 +341,8 @@ public class ManagerTest {
         "\n" +
         "Failed Benchmarks: \n" +
         "module1 linux chrome FullOptimized \n" +
-        "module1 linux chrome NoneOptimized \n" +
         "module2 linux chrome Normal \n" +
         "module2 linux chrome FullOptimized \n" +
-        "module2 linux chrome NoneOptimized \n" +
         "");
   }
 
@@ -443,22 +394,20 @@ public class ManagerTest {
     Job job1 = new Job(new JobId("jobId1"), RunnerConfigs.getAllRunners(), 1);
     job1.addResult(RunnerConfigs.CHROME_LINUX, 1);
     job1.addResult(RunnerConfigs.FIREFOX_LINUX, 2);
-    job1.addResult(RunnerConfigs.IE10_WIN, 3);
-    job1.addResult(RunnerConfigs.IE11_WIN, 4);
+    job1.addResult(RunnerConfigs.IE11_WIN, 3);
     WorkResult workResult1 = new WorkResult(job1);
     when(workResultFuture1.get()).thenReturn(workResult1);
     Job job2 = new Job(new JobId("jobId2"), RunnerConfigs.getAllRunners(), 2);
-    job2.addResult(RunnerConfigs.CHROME_LINUX, 5);
-    job2.addResult(RunnerConfigs.FIREFOX_LINUX,6);
-    job2.addResult(RunnerConfigs.IE10_WIN, 7);
-    job2.addResult(RunnerConfigs.IE11_WIN, 8);
+    job2.addResult(RunnerConfigs.CHROME_LINUX, 4);
+    job2.addResult(RunnerConfigs.FIREFOX_LINUX,5);
+    job2.addResult(RunnerConfigs.IE11_WIN, 6);
     WorkResult workResult2 = new WorkResult(job2);
     when(workResultFuture2.get()).thenReturn(workResult2);
 
     when(threadPoolExecutor.submit(benchmarkWorker)).thenReturn(workResultFuture1, workResultFuture2);
 
     manager = new Manager(collector, benchmarkWorkerFactory, poolProvider, reporterFactory, false,
-        commitReader, errorReporter, filterPredicate, false, false, devJar, userJar, "") {
+        commitReader, errorReporter, filterPredicate, false, false, devJar, userJar, "", false) {
 
         @Override
       void sleepWaitingForJobs() throws InterruptedException {
@@ -469,12 +418,10 @@ public class ManagerTest {
         assertThat(output).isEqualTo("Results:\n" + "  module1\n"
             + "    linux firefox: 2.000000 runs/second\n"
             + "    linux chrome: 1.000000 runs/second\n"
-            + "    windows ie IE10: 3.000000 runs/second\n"
-            + "    windows ie IE11: 4.000000 runs/second\n" + "  module2\n"
-            + "    linux firefox: 6.000000 runs/second\n"
-            + "    linux chrome: 5.000000 runs/second\n"
-            + "    windows ie IE10: 7.000000 runs/second\n"
-            + "    windows ie IE11: 8.000000 runs/second\n");
+            + "    windows ie IE11: 3.000000 runs/second\n" + "  module2\n"
+            + "    linux firefox: 5.000000 runs/second\n"
+            + "    linux chrome: 4.000000 runs/second\n"
+            + "    windows ie IE11: 6.000000 runs/second\n");
       }
     };
 

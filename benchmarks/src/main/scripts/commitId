@@ -8,4 +8,4 @@ fi
 SOURCE_LOCATION=${1}
 
 cd ${SOURCE_LOCATION}
-git rev-parse HEAD
+git log --format=%H -1

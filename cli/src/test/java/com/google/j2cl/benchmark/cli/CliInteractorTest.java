@@ -112,8 +112,6 @@ public class CliInteractorTest {
   @Test
   public void testGetCurrentCommitId() throws CliException {
     String commitId = scriptInteractor.getCurrentCommitId();
-    // Cut off new line char
-    commitId = commitId.substring(0, commitId.length() - 1);
 
     Assert.assertEquals(gwtSourceLocation.getAbsolutePath(), new File(commitId).getAbsolutePath());
   }

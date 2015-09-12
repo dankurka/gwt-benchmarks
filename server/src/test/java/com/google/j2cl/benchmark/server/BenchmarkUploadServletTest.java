@@ -122,7 +122,7 @@ public class BenchmarkUploadServletTest {
 
     assertThat(jobResponse.job.getJobId().getId()).isEqualTo("jobId1");
     assertThat(jobResponse.job.getStatus()).isEqualTo(Status.CREATED);
-    assertThat(jobResponse.job.getJobResults()).hasSize(4);
+    assertThat(jobResponse.job.getJobResults()).hasSize(3);
   }
 
   @Test

@@ -105,6 +105,9 @@ public class Cli {
   @Option(name="-compilerArgs", usage="The compiler args to use to compile a benchark")
   String compilerArgs = "";
 
+  @Option(name = "-skipFailures", usage = "skip failed commits")
+  boolean skipFailures = false;
+
   // receives other command line parameters than options
   @Argument
   private List<String> benchmarksToRun = Lists.newArrayList();

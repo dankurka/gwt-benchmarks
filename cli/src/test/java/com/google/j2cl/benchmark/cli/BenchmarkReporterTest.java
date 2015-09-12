@@ -123,9 +123,6 @@ public class BenchmarkReporterTest {
       boolean sleep(int seconds) {
         return true;
       }
-
-      @Override
-      void sleepBecauseOfBug() throws InterruptedException {}
     };
 
     List<CellEntry> headerEntriesList = Lists.<CellEntry>newArrayList(mockCellEntry(1, 1, "commit"),
@@ -231,9 +228,6 @@ public class BenchmarkReporterTest {
       boolean sleep(int seconds) {
         return true;
       }
-
-      @Override
-      void sleepBecauseOfBug() throws InterruptedException {}
     };
 
     WorksheetFeed worksheetFeed = mock(WorksheetFeed.class);

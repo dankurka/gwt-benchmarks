@@ -88,8 +88,10 @@ public class CliInteractor implements BenchmarkCompiler {
 
   public String getCurrentCommitId() throws CliException {
     File gitCommitScript = new File(scriptDirectory, "commitId");
-    return runCommand(
+    String commitId = runCommand(
         gitCommitScript.getAbsolutePath() + " " + gwtSourceLocation.getAbsolutePath());
+    commitId = commitId.replace("\n", "").replace("\r", "");
+    return commitId;
   }
 
   public long getDateForCommitInMsEpoch(String currentCommitId) throws CliException {
@@ -97,7 +99,7 @@ public class CliInteractor implements BenchmarkCompiler {
     String dateForCommitString = runCommand(commitDateScript.getAbsolutePath() + " "
         + gwtSourceLocation.getAbsolutePath() + " " + currentCommitId);
     // cut off new line
-    dateForCommitString = dateForCommitString.substring(0, dateForCommitString.length() - 1);
+    dateForCommitString = dateForCommitString.replace("\n", "").replace("\r", "");
     return Long.valueOf(dateForCommitString) * 1000;
   }
 
@@ -112,7 +114,7 @@ public class CliInteractor implements BenchmarkCompiler {
         logger.severe("can not load last commitId from store");
         throw new CliException("can not load last commitId from store");
       }
-      return commitId;
+      return commitId.replace("\n", "").replace("\r", "");
     } catch (IOException e) {
       logger.log(Level.WARNING, "Can not read commit from store file", e);
       throw new CliException("Can not read commit from store file", e);
@@ -123,8 +125,10 @@ public class CliInteractor implements BenchmarkCompiler {
 
   public void maybeCheckoutNextCommit(String baseCommitId) throws CliException {
     File pullChangesScript = new File(scriptDirectory, "maybe_checkout_next_commit");
-    runCommand(pullChangesScript.getAbsolutePath() + " " + baseCommitId + " "
-        + gwtSourceLocation.getAbsolutePath());
+    String command = pullChangesScript.getAbsolutePath() + " " + baseCommitId + " "
+        + gwtSourceLocation.getAbsolutePath();
+    logger.info("Running: " + command);
+    runCommand(command);
   }
 
   public void storeCommitId(String commitId) throws CliException {

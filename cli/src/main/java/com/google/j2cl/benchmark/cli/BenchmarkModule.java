@@ -88,6 +88,7 @@ public class BenchmarkModule extends AbstractModule {
         .toInstance(cli.benchmarkFilter);
     bind(Boolean.class).annotatedWith(Names.named("deamonMode")).toInstance(cli.deamon);
     bind(Boolean.class).annotatedWith(Names.named("skipSDKBuild")).toInstance(cli.skipBuild);
+    bind(Boolean.class).annotatedWith(Names.named("skipFailures")).toInstance(cli.skipFailures);
 
     bind(File.class).annotatedWith(Names.named("scriptDirectory"))
         .toInstance(new File(cli.benchmarksLocation, "src/main/scripts/"));

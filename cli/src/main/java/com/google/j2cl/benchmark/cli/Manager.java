@@ -109,6 +109,8 @@ public class Manager {
 
   private final String compilerArgs;
 
+  private final boolean skipFailures;
+
   @Inject
   public Manager(BenchmarkFinder collector, BenchmarkWorker.Factory benchmarkWorkerFactory,
       @Named("managerPoolSize") Provider<ExecutorService> poolProvider,
@@ -117,7 +119,7 @@ public class Manager {
       @Named("benchmarkFilter") Predicate<String> benchmarkFilter,
       @Named("deamonMode") boolean deamonMode, @Named("skipSDKBuild") boolean skipSDKBuild,
       @Named("gwtDevJar") File devJar, @Named("gwtUserJar") File userJar,
-      @Named("compilerArgs") String compilerArgs) {
+      @Named("compilerArgs") String compilerArgs, @Named("skipFailures") boolean skipFailures) {
     this.benchmarkFinder = collector;
     this.benchmarkWorkerFactory = benchmarkWorkerFactory;
     this.poolProvider = poolProvider;
@@ -131,6 +133,7 @@ public class Manager {
     this.devJar = devJar;
     this.userJar = userJar;
     this.compilerArgs = compilerArgs;
+    this.skipFailures = skipFailures;
   }
 
   private BenchmarkRun createBenchmarkRunForModule(
@@ -182,7 +185,6 @@ public class Manager {
       currentCommitDateMsEpoch = cliInteractor.getDateForCommitInMsEpoch(currentCommitId);
       logger.info("Checking out last commit");
       cliInteractor.checkout(lastSuccessfulCommitId);
-      logger.info(String.format("found a new commit %s", currentCommitId));
       logger.info("Getting its commit date");
       currentCommitDateMsEpoch = cliInteractor.getDateForCommitInMsEpoch(currentCommitId);
       return true;
@@ -198,8 +200,11 @@ public class Manager {
   protected boolean checkForPossibleUpdates() {
     hasUpdates = false;
     try {
+      logger.info("last sucessful: " + lastSuccessfulCommitId);
       cliInteractor.maybeCheckoutNextCommit(lastSuccessfulCommitId);
       String commitId = cliInteractor.getCurrentCommitId();
+      logger.info("next from command line: " + commitId);
+      logger.info("current: " + currentCommitId);
       hasUpdates = !currentCommitId.equals(commitId);
       currentCommitId = commitId;
       return true;
@@ -315,12 +320,20 @@ public class Manager {
 
       if (!successfulRun) {
         reportNonSuccesulRuns(finishedRuns);
-        return;
+        if (!skipFailures) {
+          return;
+        }
+        moveToNextCommit();
+        continue;
       }
 
       if (!maybeReportResults(currentCommitId, finishedRuns)) {
         reportError("Unable to save results to spreadsheet");
-        return;
+        if (!skipFailures) {
+          return;
+        }
+        moveToNextCommit();
+        continue;
       }
 
       if (!updateCurrentCommit(currentCommitId)) {
@@ -328,6 +341,12 @@ public class Manager {
         return;
       }
     }
+  }
+
+  protected void moveToNextCommit() {
+    String message = String.format("Skipping commit %s since we had failures", currentCommitId);
+    logger.info(message);
+    updateCurrentCommit(currentCommitId);
   }
 
   protected ImmutableList<BenchmarkRun> convertToBenchmarkRuns(List<RunInfo> jobFutures) {
@@ -498,8 +517,8 @@ public class Manager {
       // TODO(dankurka): Talk with Goktug about using precondistions here
       new CompilerSettings("Normal", ""),
       new CompilerSettings("FullOptimized", "-optimize 9 -XnoclassMetadata " +
-          "-XnocheckCasts"),
-      new CompilerSettings("NoneOptimized", "-style PRETTY -optimize 0"));
+          "-XnocheckCasts")/*,
+      new CompilerSettings("NoneOptimized", "-style PRETTY -optimize 0")*/);
 
   private static class CompilerSettings {
     public final String args;

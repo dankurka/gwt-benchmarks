@@ -215,15 +215,6 @@ public class BenchmarkReporter {
     }
     List<ValueToAdd> valuesToAdd = calculateValuesToAdd(headers, benchmarkRun, rowIndex);
     addOrUpdateCells(service, worksheetEntry, valuesToAdd);
-
-    sleepBecauseOfBug();
-  }
-
-  @VisibleForTesting
-  void sleepBecauseOfBug() throws InterruptedException {
-    // TODO(dankurka): follow up with docs teams
-    //see http://b/21856597
-    Thread.sleep(5000);
   }
 
   private void ensureAllHeadersPresent(SpreadsheetService service, WorksheetEntry worksheetEntry,
