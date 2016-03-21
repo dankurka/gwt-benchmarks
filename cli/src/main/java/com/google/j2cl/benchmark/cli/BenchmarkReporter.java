@@ -33,8 +33,10 @@ import com.google.inject.assistedinject.Assisted;
 import com.google.inject.name.Named;
 import com.google.j2cl.benchmark.cli.BenchmarkRun.Result;
 import com.google.j2cl.benchmark.common.runner.RunnerConfig;
+import com.google.j2cl.benchmark.common.runner.RunnerConfigs;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -79,7 +81,7 @@ public class BenchmarkReporter {
   private final List<BenchmarkRun> benchmarkRuns;
   private final String commitId;
 
-  private final File oAuthDir;
+  private final File persistenceDir;
 
   private final String clientJsonSecret;
 
@@ -90,12 +92,13 @@ public class BenchmarkReporter {
   @Inject
   public BenchmarkReporter(@Assisted List<BenchmarkRun> benchmarkRunsByBenchmarkName,
       @Assisted("commitId") String commitId,
-      @Named("persistenceDir") File oAuthDir, @Named("client_json_secret") String clientJsonSecret,
+      @Named("persistenceDir") File persistenceDir, @Named("client_json_secret") String clientJsonSecret,
       Provider<SpreadsheetService> spreadSheetServiveProvider,
       @Named("spreadSheetId") String spreadSheetId) {
     this.benchmarkRuns = benchmarkRunsByBenchmarkName;
     this.commitId = commitId;
-    this.oAuthDir = oAuthDir;
+    this.persistenceDir = new File(persistenceDir, "results");
+    this.persistenceDir.mkdir();
     this.clientJsonSecret = clientJsonSecret;
     this.spreadSheetServiveProvider = spreadSheetServiveProvider;
     this.spreadSheetId = spreadSheetId;
@@ -142,43 +145,36 @@ public class BenchmarkReporter {
 
   @VisibleForTesting
   void doPostResult() throws Exception {
-    Credential credential = authorize();
-    SpreadsheetService service = spreadSheetServiveProvider.get();
-    service.setOAuth2Credentials(credential);
-    Map<String, WorksheetEntry> sheetsByName = sheetsByName(service);
-
-    // calculate all sheets that need to be created
-    Set<String> sheetsToCreate = new HashSet<>(FluentIterable.from(benchmarkRuns).transform(
-        new Function<BenchmarkRun, String>() {
-            @Override
-            public String apply(BenchmarkRun input) {
-              return getNameFromBenchmarkRun(input);
-            }
-        }).toSet());
-    Set<String> allSpreadSheetNames = sheetsByName.keySet();
-    sheetsToCreate.removeAll(allSpreadSheetNames);
-
-    Map<String, WorksheetEntry> createdWorkSheetsByName = createSheets(service, sheetsToCreate);
-    sheetsByName.putAll(createdWorkSheetsByName);
-
-
-    List<BenchmarkRun> benchmarkNamesList = Lists.newArrayList(benchmarkRuns);
-    // make sure our order of adding the spreadsheets is deterministic (makes testing easier)
-    Collections.sort(benchmarkNamesList, new Comparator<BenchmarkRun>() {
-      @Override
-      public int compare(BenchmarkRun o1, BenchmarkRun o2) {
-        return o1.getModuleName().compareTo(o2.getModuleName());
+    
+    
+    
+    for (BenchmarkRun benchmarkRun : benchmarkRuns) {
+      String fileName =  getNameFromBenchmarkRun(benchmarkRun);
+      File outputFile = new File(persistenceDir, fileName);
+      FileWriter fileWriter = new FileWriter(outputFile, true);
+      String commitId2 = benchmarkRun.getCommitId();
+      if (commitId2.endsWith("\n")) {
+        commitId2.substring(0, commitId2.length() - 1);
       }
-    });
-
-    for (BenchmarkRun benchmarkRun  : benchmarkNamesList) {
-      WorksheetEntry worksheetEntry = sheetsByName.get(getNameFromBenchmarkRun(benchmarkRun));
-      if (worksheetEntry == null) {
-        // This should never happen since we just created the damn thing
-        throw new IllegalStateException();
-      }
-      postBenchmarkRunToSpreadSheet(service, worksheetEntry, benchmarkRun);
+      
+      fileWriter.write(commitId2);
+      fileWriter.write(",");
+      
+      fileWriter.write("" + benchmarkRun.getResults().get(RunnerConfigs.CHROME_LINUX).getRunsPerSecond());
+      fileWriter.write(",");
+      
+      
+      
+      fileWriter.write("" + benchmarkRun.getResults().get(RunnerConfigs.FIREFOX_LINUX).getRunsPerSecond());
+      fileWriter.write(",");
+      
+      
+      fileWriter.write("" + benchmarkRun.getResults().get(RunnerConfigs.IE11_WIN).getRunsPerSecond());
+      fileWriter.write(",");
+      fileWriter.write("\n");
+      fileWriter.close();
     }
+   
   }
 
   private String getNameFromBenchmarkRun(BenchmarkRun run) {
@@ -406,6 +402,7 @@ public class BenchmarkReporter {
 
   @VisibleForTesting
   Credential authorize() throws IOException, GeneralSecurityException {
-    return OAuthHelper.authorize(oAuthDir, clientJsonSecret);
+    // return OAuthHelper.authorize(oAuthDir, clientJsonSecret);
+    return null;
   }
 }

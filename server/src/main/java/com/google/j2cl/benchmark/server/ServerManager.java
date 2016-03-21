@@ -69,6 +69,7 @@ public class ServerManager {
     private RunnerConfig config;
     private String url;
     private final Runner.Factory runnerFactory;
+    private int retryCount = 0;
 
     public Worker(JobId jobId, RunnerConfig config, String url, Runner.Factory runnerFactory) {
       this.jobId = jobId;
@@ -81,7 +82,10 @@ public class ServerManager {
     public void run() {
       Runner runner = runnerFactory.create(config, url);
       runner.run();
-      if (runner.isFailed()) {
+      if (runner.isFailed() && retryCount < 3) {
+        retryCount++;
+        run();
+      } else if (runner.isFailed()) {
         failed(jobId, config, runner.getErrorMessage());
       } else {
         finished(jobId, config, runner.getResult());

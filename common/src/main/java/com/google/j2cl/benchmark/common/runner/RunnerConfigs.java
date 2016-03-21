@@ -110,7 +110,7 @@ public final class RunnerConfigs {
     return Arrays.asList(
         RunnerConfigs.FIREFOX_LINUX,
         RunnerConfigs.CHROME_LINUX,
-        RunnerConfigs.IE10_WIN,
+        //RunnerConfigs.IE10_WIN,
         RunnerConfigs.IE11_WIN);
   }
 

@@ -496,10 +496,11 @@ public class Manager {
 
   private static final ImmutableList<CompilerSettings> COMPILER_SETINGS = ImmutableList.of(
       // TODO(dankurka): Talk with Goktug about using precondistions here
-      new CompilerSettings("Normal", ""),
+      //new CompilerSettings("Normal", ""),
       new CompilerSettings("FullOptimized", "-optimize 9 -XnoclassMetadata " +
-          "-XnocheckCasts"),
-      new CompilerSettings("NoneOptimized", "-style PRETTY -optimize 0"));
+          "-XnocheckCasts")/*,*/
+      //new CompilerSettings("NoneOptimized", "-style PRETTY -optimize 0")
+      );
 
   private static class CompilerSettings {
     public final String args;
