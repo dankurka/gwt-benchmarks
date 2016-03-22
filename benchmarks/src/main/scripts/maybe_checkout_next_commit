@@ -16,9 +16,11 @@ git checkout origin/master
 NEXT_COMMIT=$(git log --ancestry-path --format=%H ${PARENT_COMMIT}..origin/master | tail -1)
 
 if [[ -z "$NEXT_COMMIT" ]]; then
+  echo "No new commit, checking out parent"
+  git checkout $PARENT_COMMIT
   exit 0
 fi
 
-echo "checkting out ${NEXT_COMMIT}"
+echo "checking out next ${NEXT_COMMIT}"
 
 git checkout $NEXT_COMMIT
