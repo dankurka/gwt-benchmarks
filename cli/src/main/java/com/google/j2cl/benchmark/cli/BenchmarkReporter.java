@@ -154,7 +154,7 @@ public class BenchmarkReporter {
       FileWriter fileWriter = new FileWriter(outputFile, true);
       String commitId2 = benchmarkRun.getCommitId();
       if (commitId2.endsWith("\n")) {
-        commitId2.substring(0, commitId2.length() - 1);
+        commitId2 = commitId2.substring(0, commitId2.length() - 1);
       }
       
       fileWriter.write(commitId2);
