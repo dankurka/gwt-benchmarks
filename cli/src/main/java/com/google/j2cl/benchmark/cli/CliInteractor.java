@@ -88,8 +88,12 @@ public class CliInteractor implements BenchmarkCompiler {
 
   public String getCurrentCommitId() throws CliException {
     File gitCommitScript = new File(scriptDirectory, "commitId");
-    return runCommand(
+    String commitId = runCommand(
         gitCommitScript.getAbsolutePath() + " " + gwtSourceLocation.getAbsolutePath());
+    if (commitId.endsWith("\n")) {
+      commitId = commitId.substring(0, commitId.length() - 1);
+    }
+    return commitId;
   }
 
   public long getDateForCommitInMsEpoch(String currentCommitId) throws CliException {
@@ -111,6 +115,9 @@ public class CliInteractor implements BenchmarkCompiler {
       if (commitId == null) {
         logger.severe("can not load last commitId from store");
         throw new CliException("can not load last commitId from store");
+      }
+      if (commitId.endsWith("\n")) {
+        commitId = commitId.substring(0, commitId.length() - 1);
       }
       return commitId;
     } catch (IOException e) {
