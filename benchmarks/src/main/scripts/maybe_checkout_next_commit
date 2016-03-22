@@ -15,8 +15,8 @@ git checkout origin/master
 
 NEXT_COMMIT=$(git log --ancestry-path --format=%H ${PARENT_COMMIT}..origin/master | tail -1)
 
-if [[ -z "${NEXT_COMMIT}" ]]; then
+if [[ -z "$NEXT_COMMIT" ]]; then
   exit 0
 fi
 
-git checkout ${NEXT_COMMIT}
+git checkout $NEXT_COMMIT
