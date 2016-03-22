@@ -200,7 +200,9 @@ public class Manager {
     try {
       cliInteractor.maybeCheckoutNextCommit(lastSuccessfulCommitId);
       String commitId = cliInteractor.getCurrentCommitId();
+      logger.info("Repo is now at commit: " + commitId);
       hasUpdates = !currentCommitId.equals(commitId);
+      logger.info("Do we have a new commit: " + hasUpdates);
       currentCommitId = commitId;
       return true;
 
