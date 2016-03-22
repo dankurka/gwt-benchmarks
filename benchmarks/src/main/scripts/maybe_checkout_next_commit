@@ -10,8 +10,7 @@ PARENT_COMMIT=${1}
 SOURCE_LOCATION=${2}
 
 cd ${SOURCE_LOCATION}
-git fetch origin master
-git checkout origin/master
+git pull origin master
 
 NEXT_COMMIT=$(git log --ancestry-path --format=%H ${PARENT_COMMIT}..origin/master | tail -1)
 
