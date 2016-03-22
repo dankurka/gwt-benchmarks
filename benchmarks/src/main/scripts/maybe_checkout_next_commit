@@ -19,4 +19,6 @@ if [[ -z "$NEXT_COMMIT" ]]; then
   exit 0
 fi
 
+echo "checkting out ${NEXT_COMMIT}"
+
 git checkout $NEXT_COMMIT

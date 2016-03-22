@@ -146,6 +146,7 @@ public class CliInteractor implements BenchmarkCompiler {
   }
 
   private String runCommand(String command) throws CliException {
+    logger.info("Running command: " + command);
     try {
       final Process process =
           new ProcessBuilder(command.split(" ")).redirectErrorStream(true).start();
